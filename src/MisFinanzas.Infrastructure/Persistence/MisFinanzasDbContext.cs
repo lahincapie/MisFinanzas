@@ -65,6 +65,17 @@ namespace MisFinanzas.Infrastructure.Persistence
                 .WithMany()
                 .HasForeignKey(p => p.PaymentMethodId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Seed: catálogo fijo de medios de pago
+            modelBuilder.Entity<PaymentMethod>().HasData(
+                new PaymentMethod { Id = 1, Name = "Efectivo", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) },
+                new PaymentMethod { Id = 2, Name = "Transferencia", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) },
+                new PaymentMethod { Id = 3, Name = "PSE", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) },
+                new PaymentMethod { Id = 4, Name = "Tarjeta de crédito", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) },
+                new PaymentMethod { Id = 5, Name = "Tarjeta débito", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) },
+                new PaymentMethod { Id = 6, Name = "Débito automático", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) },
+                new PaymentMethod { Id = 7, Name = "Billetera digital", IsActive = true, CreatedAt = new DateTime(2026, 1, 1) }
+            );
         }
 
     }
