@@ -21,5 +21,11 @@
 
         /// <summary>Fecha y hora de la última modificación. Nulo si nunca se ha editado.</summary>
         public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Sello de concurrencia optimista. SQL Server lo actualiza en cada
+        /// cambio de la fila; EF lo usa para detectar ediciones en conflicto.
+        /// </summary>
+        public byte[]? RowVersion { get; set; }
     }
 }
