@@ -1,10 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using MisFinanzas.Infrastructure.Persistence;
+using MisFinanzas.Infrastructure;
+using MisFinanzas.Application;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<MisFinanzasDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddInfrastructure(
+    builder.Configuration.GetConnectionString("DefaultConnection")!);
+    builder.Services.AddApplication();
 
 // Add services to the container.
 
