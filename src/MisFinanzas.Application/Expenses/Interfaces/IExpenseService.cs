@@ -11,5 +11,11 @@ namespace MisFinanzas.Application.Expenses.Interfaces
         /// <summary>Devuelve todos los gastos activos.</summary>
         Task<List<ExpenseDto>> GetAllAsync();
 
+        /// <summary>Edita un gasto existente.</summary>
+        Task UpdateAsync(UpdateExpenseDto dto);
+
+        /// <summary>Desactiva (soft-delete) un gasto.</summary>
+        Task DeactivateAsync(int id);
+
     }
 }

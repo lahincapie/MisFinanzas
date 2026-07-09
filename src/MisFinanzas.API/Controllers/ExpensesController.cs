@@ -31,5 +31,22 @@ namespace MisFinanzas.API.Controllers
             var expenses = await _service.GetAllAsync();
             return Ok(expenses);
         }
+
+        /// <summary>Edita un gasto existente.</summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateExpenseDto dto)
+        {
+            dto.Id = id;
+            await _service.UpdateAsync(dto);
+            return NoContent();
+        }
+
+        /// <summary>Desactiva (soft-delete) un gasto.</summary>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Deactivate(int id)
+        {
+            await _service.DeactivateAsync(id);
+            return NoContent();
+        }
     }
 }
