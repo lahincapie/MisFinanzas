@@ -25,5 +25,31 @@ namespace MisFinanzas.API.Controllers
             var newId = await _service.CreateAsync(dto);
             return CreatedAtAction(nameof(Create), new { id = newId }, new { id = newId });
         }
+
+        /// <summary>Devuelve todas las categorías activas.</summary>
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var categories = await _service.GetAllAsync();
+            return Ok(categories);
+        }
+
+        /// <summary>Edita una categoría existente.</summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
+        {
+            dto.Id = id;                       // el Id de la ruta es la fuente de verdad
+            await _service.UpdateAsync(dto);
+            return NoContent();
+        }
+
+        /// <summary>Desactiva (soft-delete) una categoría.</summary>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Deactivate(int id)
+        {
+            await _service.DeactivateAsync(id);
+            return NoContent();
+        }
     }
+
 }

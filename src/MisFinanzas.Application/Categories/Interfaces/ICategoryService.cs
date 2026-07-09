@@ -9,5 +9,14 @@ namespace MisFinanzas.Application.Categories.Interfaces
     {
         /// <summary>Crea una categoría y devuelve el Id generado.</summary>
         Task<int> CreateAsync(CreateCategoryDto dto);
+        
+        /// <summary>Devuelve todas las categorías activas.</summary>
+        Task<List<CategoryDto>> GetAllAsync();
+
+        /// <summary>Edita una categoría existente.</summary>
+        Task UpdateAsync(UpdateCategoryDto dto);
+
+        /// <summary>Desactiva (soft-delete) una categoría.</summary>
+        Task DeactivateAsync(int id);
     }
 }

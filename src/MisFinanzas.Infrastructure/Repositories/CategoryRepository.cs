@@ -2,6 +2,7 @@
 using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Domain.Categories;
 using MisFinanzas.Infrastructure.Persistence;
+using MisFinanzas.Domain.Expenses;
 
 namespace MisFinanzas.Infrastructure.Repositories
 {
@@ -32,10 +33,12 @@ namespace MisFinanzas.Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
         }
 
-        public async Task<bool> ExistsByNameAsync(string name)
+        public async Task<bool> ExistsByNameAsync(string name, int? excludeId = null)
         {
             return await _context.Categories
-                .AnyAsync(c => c.IsActive && c.Name.ToLower() == name.ToLower());
+                .AnyAsync(c => c.IsActive
+                    && c.Name.ToLower() == name.ToLower()
+                    && (excludeId == null || c.Id != excludeId.Value));
         }
 
         public async Task AddAsync(Category category)
@@ -46,6 +49,12 @@ namespace MisFinanzas.Infrastructure.Repositories
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> HasActiveExpensesAsync(int categoryId)
+        {
+            return await _context.Expenses
+                .AnyAsync(e => e.IsActive && e.CategoryId == categoryId);
         }
     }
 }

@@ -15,13 +15,16 @@ namespace MisFinanzas.Application.Categories.Interfaces
         /// <summary>Busca una categoría activa por su Id. Devuelve null si no existe.</summary>
         Task<Category?> GetByIdAsync(int id);
 
-        /// <summary>Indica si ya existe una categoría activa con ese nombre (para validar duplicados).</summary>
-        Task<bool> ExistsByNameAsync(string name);
+        /// <summary>Indica si ya existe una categoría activa con ese nombre, opcionalmente excluyendo un Id.</summary>
+        Task<bool> ExistsByNameAsync(string name, int? excludeId = null);
 
         /// <summary>Agrega una nueva categoría.</summary>
         Task AddAsync(Category category);
 
         /// <summary>Marca cambios pendientes y los guarda en la base de datos.</summary>
         Task SaveChangesAsync();
+
+        /// <summary>Indica si la categoría tiene gastos activos asociados.</summary>
+        Task<bool> HasActiveExpensesAsync(int categoryId);
     }
 }
