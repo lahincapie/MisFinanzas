@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MisFinanzas.Application.Categories.Interfaces;
+using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Infrastructure.Persistence;
 using MisFinanzas.Infrastructure.Repositories;
 
@@ -21,6 +22,7 @@ namespace MisFinanzas.Infrastructure
 
             // El repositorio: cuando pidan ICategoryRepository, entregar CategoryRepository
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
             return services;
         }

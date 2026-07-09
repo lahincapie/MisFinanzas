@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Categories.Services;
+using MisFinanzas.Application.Expenses.Interfaces;
+using MisFinanzas.Application.Expenses.Services;
 using System.Reflection;
 
 namespace MisFinanzas.Application
@@ -19,6 +21,7 @@ namespace MisFinanzas.Application
 
             // Registra automáticamente TODOS los validadores de este proyecto
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddScoped<IExpenseService, ExpenseService>();
 
             return services;
         }
