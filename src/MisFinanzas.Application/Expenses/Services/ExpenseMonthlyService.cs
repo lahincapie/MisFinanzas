@@ -1,4 +1,5 @@
-﻿using MisFinanzas.Application.Expenses.Interfaces;
+﻿using MisFinanzas.Application.Common;
+using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Domain.Expenses;
 
 namespace MisFinanzas.Application.Expenses.Services
@@ -35,7 +36,7 @@ namespace MisFinanzas.Application.Expenses.Services
             // 3. Por cada gasto que aplique y no exista aún, crear su pendiente
             foreach (var expense in expenses)
             {
-                bool applies = ExpenseScheduleCalculator.AppliesToMonth(
+                bool applies = ScheduleCalculator.AppliesToMonth(
                     expense.Periodicity, expense.StartMonth, expense.EndMonth, month);
 
                 if (!applies) continue;

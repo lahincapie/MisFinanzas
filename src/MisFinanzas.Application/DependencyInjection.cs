@@ -4,6 +4,8 @@ using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Categories.Services;
 using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Application.Expenses.Services;
+using MisFinanzas.Application.Incomes.Interfaces;
+using MisFinanzas.Application.Incomes.Services;
 using System.Reflection;
 
 namespace MisFinanzas.Application
@@ -24,6 +26,9 @@ namespace MisFinanzas.Application
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IExpenseMonthlyService, ExpenseMonthlyService>();
             services.AddScoped<IExpensePaymentService, ExpensePaymentService>();
+            services.AddScoped<IIncomeService, IncomeService>();
+            services.AddScoped<IIncomeMonthlyService, IncomeMonthlyService>();
+            services.AddScoped<IIncomeReceiptService, IncomeReceiptService>();
 
 
 

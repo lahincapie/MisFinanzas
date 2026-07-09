@@ -1,12 +1,12 @@
 ﻿using MisFinanzas.Domain.Common;
 
-namespace MisFinanzas.Application.Expenses.Services
+namespace MisFinanzas.Application.Common
 {
     /// <summary>
     /// Decide si un gasto aplica a un mes dado, según su periodicidad y vigencia.
     /// Lógica pura (sin base de datos), para poder probarla de forma aislada.
     /// </summary>
-    public static class ExpenseScheduleCalculator
+    public static class ScheduleCalculator
     {
         /// <summary>
         /// Traduce la periodicidad a su salto real en meses.

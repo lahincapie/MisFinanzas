@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Expenses.Interfaces;
+using MisFinanzas.Application.Incomes.Interfaces;
 using MisFinanzas.Application.PaymentMethods.Interfaces;
 using MisFinanzas.Infrastructure.Persistence;
 using MisFinanzas.Infrastructure.Repositories;
@@ -26,6 +27,8 @@ namespace MisFinanzas.Infrastructure
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
             services.AddScoped<IExpenseMonthlyRepository, ExpenseMonthlyRepository>();
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddScoped<IIncomeRepository, IncomeRepository>();
+            services.AddScoped<IIncomeMonthlyRepository, IncomeMonthlyRepository>();
 
 
             return services;
