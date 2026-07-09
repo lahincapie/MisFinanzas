@@ -11,12 +11,15 @@ namespace MisFinanzas.API.Controllers
     {
         private readonly IExpenseService _service;
         private readonly IExpenseMonthlyService _monthlyService;
+        private readonly IExpensePaymentService _paymentService;
 
         public ExpensesController(IExpenseService service, 
-            IExpenseMonthlyService monthlyService)
+            IExpenseMonthlyService monthlyService,
+            IExpensePaymentService paymentService)
         {
             _service = service;
             _monthlyService = monthlyService;
+            _paymentService = paymentService;
         }
 
         /// <summary>Crea un nuevo gasto.</summary>
@@ -61,6 +64,23 @@ namespace MisFinanzas.API.Controllers
         {
             var created = await _monthlyService.GenerateForMonthAsync(month);
             return Ok(new { month, created });
+        }
+
+        /// <summary>Registra el pago de un gasto en un mes (lo marca como Pagado).</summary>
+        [HttpPost("{id}/months/{month}/pay")]
+        public async Task<IActionResult> Pay(
+            int id, string month, [FromBody] RegisterExpensePaymentDto dto)
+        {
+            await _paymentService.RegisterPaymentAsync(id, month, dto);
+            return NoContent();
+        }
+
+        /// <summary>Revierte el pago de un gasto en un mes (lo devuelve a Pendiente).</summary>
+        [HttpPost("{id}/months/{month}/revert")]
+        public async Task<IActionResult> Revert(int id, string month)
+        {
+            await _paymentService.RevertPaymentAsync(id, month);
+            return NoContent();
         }
     }
 }

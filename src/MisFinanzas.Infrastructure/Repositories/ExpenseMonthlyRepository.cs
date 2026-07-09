@@ -34,5 +34,24 @@ namespace MisFinanzas.Infrastructure.Repositories
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<ExpenseMonthly?> GetByExpenseAndMonthAsync(int expenseId, string month)
+        {
+            return await _context.ExpenseMonthlies
+                .FirstOrDefaultAsync(m => m.IsActive
+                    && m.ExpenseId == expenseId
+                    && m.Month == month);
+        }
+
+        public async Task AddPaymentAsync(ExpensePayment payment)
+        {
+            await _context.ExpensePayments.AddAsync(payment);
+        }
+
+        public async Task<ExpensePayment?> GetActivePaymentAsync(int expenseMonthlyId)
+        {
+            return await _context.ExpensePayments
+                .FirstOrDefaultAsync(p => p.IsActive && p.ExpenseMonthlyId == expenseMonthlyId);
+        }
     }
 }

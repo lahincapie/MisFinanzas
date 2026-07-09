@@ -23,7 +23,7 @@ namespace MisFinanzas.Application
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddScoped<IExpenseService, ExpenseService>();
             services.AddScoped<IExpenseMonthlyService, ExpenseMonthlyService>();
-
+            services.AddScoped<IExpensePaymentService, ExpensePaymentService>();
 
 
 

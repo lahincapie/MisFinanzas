@@ -18,5 +18,14 @@ namespace MisFinanzas.Application.Expenses.Interfaces
 
         /// <summary>Guarda los cambios pendientes en la base de datos.</summary>
         Task SaveChangesAsync();
+
+        /// <summary>Busca el registro mensual activo de un gasto en un mes concreto. Null si no existe.</summary>
+        Task<ExpenseMonthly?> GetByExpenseAndMonthAsync(int expenseId, string month);
+
+        /// <summary>Agrega un pago de gasto.</summary>
+        Task AddPaymentAsync(ExpensePayment payment);
+
+        /// <summary>Devuelve el pago activo de un registro mensual, si existe. Null si no hay.</summary>
+        Task<ExpensePayment?> GetActivePaymentAsync(int expenseMonthlyId);
     }
 }
