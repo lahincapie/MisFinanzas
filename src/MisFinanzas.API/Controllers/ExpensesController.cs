@@ -10,10 +10,13 @@ namespace MisFinanzas.API.Controllers
     public class ExpensesController : ControllerBase
     {
         private readonly IExpenseService _service;
+        private readonly IExpenseMonthlyService _monthlyService;
 
-        public ExpensesController(IExpenseService service)
+        public ExpensesController(IExpenseService service, 
+            IExpenseMonthlyService monthlyService)
         {
             _service = service;
+            _monthlyService = monthlyService;
         }
 
         /// <summary>Crea un nuevo gasto.</summary>
@@ -47,6 +50,17 @@ namespace MisFinanzas.API.Controllers
         {
             await _service.DeactivateAsync(id);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Genera los registros mensuales pendientes del mes indicado ("YYYY-MM")
+        /// para los gastos que aplican y aún no lo tienen.
+        /// </summary>
+        [HttpPost("generate-monthly")]
+        public async Task<IActionResult> GenerateMonthly([FromQuery] string month)
+        {
+            var created = await _monthlyService.GenerateForMonthAsync(month);
+            return Ok(new { month, created });
         }
     }
 }

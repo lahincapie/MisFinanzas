@@ -23,6 +23,9 @@ namespace MisFinanzas.Infrastructure
             // El repositorio: cuando pidan ICategoryRepository, entregar CategoryRepository
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            services.AddScoped<IExpenseMonthlyRepository, ExpenseMonthlyRepository>();
+
+
 
             return services;
         }

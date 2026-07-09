@@ -22,6 +22,10 @@ namespace MisFinanzas.Application
             // Registra automáticamente TODOS los validadores de este proyecto
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddScoped<IExpenseService, ExpenseService>();
+            services.AddScoped<IExpenseMonthlyService, ExpenseMonthlyService>();
+
+
+
 
             return services;
         }
