@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MisFinanzas.Application.Expenses.Dtos;
 using MisFinanzas.Application.Expenses.Interfaces;
 
@@ -7,6 +8,7 @@ namespace MisFinanzas.API.Controllers
     /// <summary>Endpoints REST para gestionar los gastos.</summary>
     [ApiController]
     [Route("api/expenses")]
+    [Authorize]   // ← ahora este controller exige token válido
     public class ExpensesController : ControllerBase
     {
         private readonly IExpenseService _service;

@@ -60,6 +60,11 @@ namespace MisFinanzas.API.Middleware
                     errorCode = "CONFLICT";
                     message = ex.Message;
                     break;
+                case UnauthorizedAccessException:
+                    statusCode = StatusCodes.Status401Unauthorized;
+                    errorCode = "UNAUTHORIZED";
+                    message = ex.Message;
+                    break;
             }
 
             // Log: los 500 como error; los controlados como advertencia

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MisFinanzas.Application.Categories.Dtos;
 using MisFinanzas.Application.Categories.Interfaces;
 
@@ -9,6 +10,7 @@ namespace MisFinanzas.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/categories")]
+    [Authorize]   // ← ahora este controller exige token válido
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _service;

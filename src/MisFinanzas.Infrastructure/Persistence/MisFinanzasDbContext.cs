@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MisFinanzas.Domain.Categories;
 using MisFinanzas.Domain.Expenses;
 using MisFinanzas.Domain.Incomes;
 using MisFinanzas.Domain.PaymentMethods;
+using MisFinanzas.Domain.Users;
 
 namespace MisFinanzas.Infrastructure.Persistence
 {
@@ -10,7 +12,7 @@ namespace MisFinanzas.Infrastructure.Persistence
     /// Contexto de Entity Framework Core: representa la base de datos en código.
     /// Cada DbSet declara una tabla. Por aquí pasan todas las consultas y guardados.
     /// </summary>
-    public class MisFinanzasDbContext : DbContext
+    public class MisFinanzasDbContext : IdentityDbContext<ApplicationUser>
     {
         public MisFinanzasDbContext(DbContextOptions<MisFinanzasDbContext> options)
             : base(options)

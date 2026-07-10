@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using MisFinanzas.Application.Auth.Interfaces;
 using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Application.Incomes.Interfaces;
 using MisFinanzas.Application.PaymentMethods.Interfaces;
+using MisFinanzas.Domain.Users;
+using MisFinanzas.Infrastructure.Auth;
 using MisFinanzas.Infrastructure.Persistence;
 using MisFinanzas.Infrastructure.Repositories;
 
@@ -18,7 +22,7 @@ namespace MisFinanzas.Infrastructure
         public static IServiceCollection AddInfrastructure(
             this IServiceCollection services, string connectionString)
         {
-            // El DbContext (antes estaba en Program.cs; lo movemos aquí)
+            // El DbContext
             services.AddDbContext<MisFinanzasDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -29,7 +33,21 @@ namespace MisFinanzas.Infrastructure
             services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
             services.AddScoped<IIncomeRepository, IncomeRepository>();
             services.AddScoped<IIncomeMonthlyRepository, IncomeMonthlyRepository>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
+            services.AddIdentityCore<ApplicationUser>(options =>
+            {
+                // Reglas de contraseña
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+
+                // Email único por usuario
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<MisFinanzasDbContext>();
 
             return services;
         }

@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using MisFinanzas.Application.Auth.Interfaces;
+using MisFinanzas.Application.Auth.Services;
 using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Categories.Services;
 using MisFinanzas.Application.Expenses.Interfaces;
@@ -29,8 +31,8 @@ namespace MisFinanzas.Application
             services.AddScoped<IIncomeService, IncomeService>();
             services.AddScoped<IIncomeMonthlyService, IncomeMonthlyService>();
             services.AddScoped<IIncomeReceiptService, IncomeReceiptService>();
-
-
+            services.AddScoped<IAuthService, AuthService>();
+            
 
             return services;
         }

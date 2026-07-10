@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MisFinanzas.Application.Incomes.Dtos;
 using MisFinanzas.Application.Incomes.Interfaces;
 
@@ -7,6 +8,7 @@ namespace MisFinanzas.API.Controllers
     /// <summary>Endpoints REST para gestionar los ingresos.</summary>
     [ApiController]
     [Route("api/incomes")]
+    [Authorize]   // ← ahora este controller exige token válido
     public class IncomesController : ControllerBase
     {
         private readonly IIncomeService _service;
