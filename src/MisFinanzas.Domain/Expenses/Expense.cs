@@ -10,6 +10,9 @@ namespace MisFinanzas.Domain.Expenses
     /// </summary>
     public class Expense : BaseEntity
     {
+        /// <summary>Id del usuario dueño de este gasto.</summary>
+        public string UserId { get; set; } = string.Empty;
+
         /// <summary>Nombre del gasto. Obligatorio y único por usuario.</summary>
         public string Name { get; set; } = string.Empty;
 

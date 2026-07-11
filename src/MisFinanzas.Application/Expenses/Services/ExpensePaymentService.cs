@@ -26,7 +26,7 @@ namespace MisFinanzas.Application.Expenses.Services
             _validator = validator;
         }
 
-        public async Task RegisterPaymentAsync(int expenseId, string month, RegisterExpensePaymentDto dto)
+        public async Task RegisterPaymentAsync(int expenseId, string month, RegisterExpensePaymentDto dto, string userId)
         {
             // 1. Validación de forma
             await _validator.ValidateAndThrowAsync(dto);
@@ -65,7 +65,7 @@ namespace MisFinanzas.Application.Expenses.Services
             await _monthlyRepository.SaveChangesAsync();
         }
 
-        public async Task RevertPaymentAsync(int expenseId, string month)
+        public async Task RevertPaymentAsync(int expenseId, string month, string userId)
         {
             // 1. El registro mensual debe existir
             var monthly = await _monthlyRepository.GetByExpenseAndMonthAsync(expenseId, month);

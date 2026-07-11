@@ -6,10 +6,10 @@ namespace MisFinanzas.Application.Expenses.Interfaces
     public interface IExpensePaymentService
     {
         /// <summary>Registra el pago de un gasto en un mes y lo marca como Pagado.</summary>
-        Task RegisterPaymentAsync(int expenseId, string month, RegisterExpensePaymentDto dto);
+        Task RegisterPaymentAsync(int expenseId, string month, RegisterExpensePaymentDto dto, string userId);
 
         /// <summary>Revierte el pago de un gasto en un mes: lo devuelve a Pendiente
         /// y conserva el pago anterior como inactivo.</summary>
-        Task RevertPaymentAsync(int expenseId, string month);
+        Task RevertPaymentAsync(int expenseId, string month, string userId);
     }
 }

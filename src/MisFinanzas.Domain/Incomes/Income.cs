@@ -9,6 +9,10 @@ namespace MisFinanzas.Domain.Incomes
     /// </summary>
     public class Income : BaseEntity
     {
+        /// <summary>Id del usuario dueño de este ingreso.</summary>
+        public string UserId { get; set; } = string.Empty;
+
+
         /// <summary>Nombre del ingreso. Obligatorio y único por usuario.</summary>
         public string Name { get; set; } = string.Empty;
 

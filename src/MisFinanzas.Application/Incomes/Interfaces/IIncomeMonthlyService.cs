@@ -7,6 +7,6 @@
         /// Genera los pendientes del mes ("YYYY-MM") para los ingresos que aplican
         /// y aún no lo tienen. Devuelve cuántos creó.
         /// </summary>
-        Task<int> GenerateForMonthAsync(string month);
+        Task<int> GenerateForMonthAsync(string month, string userId);
     }
 }

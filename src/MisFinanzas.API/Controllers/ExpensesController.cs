@@ -9,7 +9,7 @@ namespace MisFinanzas.API.Controllers
     [ApiController]
     [Route("api/expenses")]
     [Authorize]   // ← ahora este controller exige token válido
-    public class ExpensesController : ControllerBase
+    public class ExpensesController : ApiControllerBase
     {
         private readonly IExpenseService _service;
         private readonly IExpenseMonthlyService _monthlyService;
@@ -28,7 +28,7 @@ namespace MisFinanzas.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateExpenseDto dto)
         {
-            var newId = await _service.CreateAsync(dto);
+            var newId = await _service.CreateAsync(dto, CurrentUserId);
             return CreatedAtAction(nameof(Create), new { id = newId }, new { id = newId });
         }
 
@@ -36,7 +36,7 @@ namespace MisFinanzas.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var expenses = await _service.GetAllAsync();
+            var expenses = await _service.GetAllAsync(CurrentUserId);
             return Ok(expenses);
         }
 
@@ -45,7 +45,7 @@ namespace MisFinanzas.API.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateExpenseDto dto)
         {
             dto.Id = id;
-            await _service.UpdateAsync(dto);
+            await _service.UpdateAsync(dto, CurrentUserId);
             return NoContent();
         }
 
@@ -53,7 +53,7 @@ namespace MisFinanzas.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deactivate(int id)
         {
-            await _service.DeactivateAsync(id);
+            await _service.DeactivateAsync(id, CurrentUserId);
             return NoContent();
         }
 
@@ -64,7 +64,7 @@ namespace MisFinanzas.API.Controllers
         [HttpPost("generate-monthly")]
         public async Task<IActionResult> GenerateMonthly([FromQuery] string month)
         {
-            var created = await _monthlyService.GenerateForMonthAsync(month);
+            var created = await _monthlyService.GenerateForMonthAsync(month, CurrentUserId);
             return Ok(new { month, created });
         }
 
@@ -73,7 +73,7 @@ namespace MisFinanzas.API.Controllers
         public async Task<IActionResult> Pay(
             int id, string month, [FromBody] RegisterExpensePaymentDto dto)
         {
-            await _paymentService.RegisterPaymentAsync(id, month, dto);
+            await _paymentService.RegisterPaymentAsync(id, month, dto, CurrentUserId);
             return NoContent();
         }
 
@@ -81,7 +81,7 @@ namespace MisFinanzas.API.Controllers
         [HttpPost("{id}/months/{month}/revert")]
         public async Task<IActionResult> Revert(int id, string month)
         {
-            await _paymentService.RevertPaymentAsync(id, month);
+            await _paymentService.RevertPaymentAsync(id, month, CurrentUserId);
             return NoContent();
         }
     }

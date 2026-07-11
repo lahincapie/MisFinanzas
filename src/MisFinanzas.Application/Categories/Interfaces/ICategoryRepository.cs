@@ -10,13 +10,13 @@ namespace MisFinanzas.Application.Categories.Interfaces
     public interface ICategoryRepository
     {
         /// <summary>Devuelve las categorías activas del usuario.</summary>
-        Task<List<Category>> GetAllActiveAsync();
+        Task<List<Category>> GetAllActiveAsync(string userId);
 
         /// <summary>Busca una categoría activa por su Id. Devuelve null si no existe.</summary>
-        Task<Category?> GetByIdAsync(int id);
+        Task<Category?> GetByIdAsync(int id, string userId);
 
         /// <summary>Indica si ya existe una categoría activa con ese nombre, opcionalmente excluyendo un Id.</summary>
-        Task<bool> ExistsByNameAsync(string name, int? excludeId = null);
+        Task<bool> ExistsByNameAsync(string name, string userId, int? excludeId = null);
 
         /// <summary>Agrega una nueva categoría.</summary>
         Task AddAsync(Category category);

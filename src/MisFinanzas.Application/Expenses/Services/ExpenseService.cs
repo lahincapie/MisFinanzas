@@ -29,18 +29,18 @@ namespace MisFinanzas.Application.Expenses.Services
             _updateValidator = updateValidator;
         }
 
-        public async Task<int> CreateAsync(CreateExpenseDto dto)
+        public async Task<int> CreateAsync(CreateExpenseDto dto, string userId)
         {
             // 1. Validación de forma
             await _createValidator.ValidateAndThrowAsync(dto);
 
             // 2. La categoría debe existir y estar activa
-            var category = await _categoryRepository.GetByIdAsync(dto.CategoryId);
+            var category = await _categoryRepository.GetByIdAsync(dto.CategoryId, userId);
             if (category is null)
                 throw new KeyNotFoundException("La categoría seleccionada no existe o no está activa.");
 
             // 3. Nombre de gasto único
-            if (await _repository.ExistsByNameAsync(dto.Name))
+            if (await _repository.ExistsByNameAsync(dto.Name, userId))
                 throw new InvalidOperationException("Ya existe un gasto con ese nombre.");
 
             // 4. Traducir DTO -> entidad del Domain
@@ -58,6 +58,7 @@ namespace MisFinanzas.Application.Expenses.Services
                 EndMonth = dto.EndMonth,
                 Reference = dto.Reference,
                 Contract = dto.Contract,
+                UserId = userId,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
@@ -69,9 +70,9 @@ namespace MisFinanzas.Application.Expenses.Services
             return expense.Id;
         }
 
-        public async Task<List<ExpenseDto>> GetAllAsync()
+        public async Task<List<ExpenseDto>> GetAllAsync(string userId)
         {
-            var expenses = await _repository.GetAllActiveAsync();
+            var expenses = await _repository.GetAllActiveAsync(userId);
 
             return expenses.Select(e => new ExpenseDto
             {
@@ -93,23 +94,23 @@ namespace MisFinanzas.Application.Expenses.Services
         }
 
         
-        public async Task UpdateAsync(UpdateExpenseDto dto)
+        public async Task UpdateAsync(UpdateExpenseDto dto, string userId)
         {
             // 1. Validación de forma
             await _updateValidator.ValidateAndThrowAsync(dto);
 
             // 2. El gasto debe existir
-            var expense = await _repository.GetByIdAsync(dto.Id);
+            var expense = await _repository.GetByIdAsync(dto.Id, userId);
             if (expense is null)
                 throw new KeyNotFoundException("El gasto no existe.");
 
             // 3. La categoría (que puede haber cambiado) debe existir y estar activa
-            var category = await _categoryRepository.GetByIdAsync(dto.CategoryId);
+            var category = await _categoryRepository.GetByIdAsync(dto.CategoryId, userId);
             if (category is null)
                 throw new KeyNotFoundException("La categoría seleccionada no existe o no está activa.");
 
             // 4. Nombre único, excluyendo el propio gasto
-            if (await _repository.ExistsByNameAsync(dto.Name, dto.Id))
+            if (await _repository.ExistsByNameAsync(dto.Name, userId, dto.Id))
                 throw new InvalidOperationException("Ya existe otro gasto con ese nombre.");
 
             // 5. Modificar los campos
@@ -131,10 +132,10 @@ namespace MisFinanzas.Application.Expenses.Services
             await _repository.SaveChangesAsync();
         }
 
-        public async Task DeactivateAsync(int id)
+        public async Task DeactivateAsync(int id, string userId)
         {
             // 1. El gasto debe existir
-            var expense = await _repository.GetByIdAsync(id);
+            var expense = await _repository.GetByIdAsync(id, userId);
             if (expense is null)
                 throw new KeyNotFoundException("El gasto no existe.");
 

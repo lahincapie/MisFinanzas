@@ -8,15 +8,15 @@ namespace MisFinanzas.Application.Categories.Interfaces
     public interface ICategoryService
     {
         /// <summary>Crea una categoría y devuelve el Id generado.</summary>
-        Task<int> CreateAsync(CreateCategoryDto dto);
+        Task<int> CreateAsync(CreateCategoryDto dto, string userId);
         
         /// <summary>Devuelve todas las categorías activas.</summary>
-        Task<List<CategoryDto>> GetAllAsync();
+        Task<List<CategoryDto>> GetAllAsync(string userId);
 
         /// <summary>Edita una categoría existente.</summary>
-        Task UpdateAsync(UpdateCategoryDto dto);
+        Task UpdateAsync(UpdateCategoryDto dto, string userId);
 
         /// <summary>Desactiva (soft-delete) una categoría.</summary>
-        Task DeactivateAsync(int id);
+        Task DeactivateAsync(int id, string userId);
     }
 }

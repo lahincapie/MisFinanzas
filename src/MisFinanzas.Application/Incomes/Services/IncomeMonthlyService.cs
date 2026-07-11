@@ -21,9 +21,9 @@ namespace MisFinanzas.Application.Incomes.Services
             _monthlyRepository = monthlyRepository;
         }
 
-        public async Task<int> GenerateForMonthAsync(string month)
+        public async Task<int> GenerateForMonthAsync(string month, string userId)
         {
-            var incomes = await _incomeRepository.GetAllActiveAsync();
+            var incomes = await _incomeRepository.GetAllActiveAsync(userId);
 
             var existingIds = (await _monthlyRepository.GetExistingIncomeIdsForMonthAsync(month))
                 .ToHashSet();

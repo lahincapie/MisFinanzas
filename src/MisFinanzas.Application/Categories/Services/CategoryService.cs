@@ -25,13 +25,13 @@ namespace MisFinanzas.Application.Categories.Services
             _updateValidator = updateValidator;
         }
 
-        public async Task<int> CreateAsync(CreateCategoryDto dto)
+        public async Task<int> CreateAsync(CreateCategoryDto dto, string userId)
         {
             // 1. Validación de forma (FluentValidation)
             await _createValidator.ValidateAndThrowAsync(dto);
 
             // 2. Regla de negocio: el nombre debe ser único
-            if (await _repository.ExistsByNameAsync(dto.Name))
+            if (await _repository.ExistsByNameAsync(dto.Name, userId))
                 throw new InvalidOperationException("Ya existe una categoría con ese nombre.");
 
             // 3. Traducir DTO -> entidad del Domain
@@ -42,6 +42,7 @@ namespace MisFinanzas.Application.Categories.Services
                 Color = dto.Color,
                 Icon = dto.Icon,
                 Order = dto.Order,
+                UserId = userId,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
@@ -53,9 +54,9 @@ namespace MisFinanzas.Application.Categories.Services
             return category.Id;
         }
 
-        public async Task<List<CategoryDto>> GetAllAsync()
+        public async Task<List<CategoryDto>> GetAllAsync(string userId)
         {
-            var categories = await _repository.GetAllActiveAsync();
+            var categories = await _repository.GetAllActiveAsync(userId);
 
             // Traducir cada entidad -> DTO de salida
             return categories.Select(c => new CategoryDto
@@ -69,18 +70,18 @@ namespace MisFinanzas.Application.Categories.Services
             }).ToList();
         }
 
-        public async Task UpdateAsync(UpdateCategoryDto dto)
+        public async Task UpdateAsync(UpdateCategoryDto dto, string userId)
         {
             // 1. Validación de forma
             await _updateValidator.ValidateAndThrowAsync(dto);
 
             // 2. Debe existir
-            var category = await _repository.GetByIdAsync(dto.Id);
+            var category = await _repository.GetByIdAsync(dto.Id, userId);
             if (category is null)
                 throw new KeyNotFoundException("La categoría no existe.");
 
             // 3. Nombre único, excluyendo la propia categoría
-            if (await _repository.ExistsByNameAsync(dto.Name, dto.Id))
+            if (await _repository.ExistsByNameAsync(dto.Name, userId, dto.Id))
                 throw new InvalidOperationException("Ya existe otra categoría con ese nombre.");
 
             // 4. Modificar los campos permitidos
@@ -95,10 +96,10 @@ namespace MisFinanzas.Application.Categories.Services
             await _repository.SaveChangesAsync();
         }
 
-        public async Task DeactivateAsync(int id)
+        public async Task DeactivateAsync(int id, string userId)
         {
             // 1. Debe existir
-            var category = await _repository.GetByIdAsync(id);
+            var category = await _repository.GetByIdAsync(id, userId);
             if (category is null)
                 throw new KeyNotFoundException("La categoría no existe.");
 

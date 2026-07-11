@@ -17,26 +17,27 @@ namespace MisFinanzas.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Expense>> GetAllActiveAsync()
+        public async Task<List<Expense>> GetAllActiveAsync(string userId)
         {
             return await _context.Expenses
-                .Where(e => e.IsActive)
-                .Include(e => e.Category)   // trae también la categoría
+                .Where(e => e.IsActive && e.UserId == userId)   // ← filtro por dueño
+                .Include(e => e.Category)
                 .OrderBy(e => e.Name)
                 .ToListAsync();
         }
 
-        public async Task<Expense?> GetByIdAsync(int id)
+        public async Task<Expense?> GetByIdAsync(int id, string userId)
         {
             return await _context.Expenses
                 .Include(e => e.Category)
-                .FirstOrDefaultAsync(e => e.Id == id && e.IsActive);
+                .FirstOrDefaultAsync(e => e.Id == id && e.IsActive && e.UserId == userId);
         }
 
-        public async Task<bool> ExistsByNameAsync(string name, int? excludeId = null)
+        public async Task<bool> ExistsByNameAsync(string name, string userId, int? excludeId = null)
         {
             return await _context.Expenses
                 .AnyAsync(e => e.IsActive
+                    && e.UserId == userId
                     && e.Name.ToLower() == name.ToLower()
                     && (excludeId == null || e.Id != excludeId.Value));
         }

@@ -21,10 +21,10 @@ namespace MisFinanzas.Application.Expenses.Services
             _monthlyRepository = monthlyRepository;
         }
 
-        public async Task<int> GenerateForMonthAsync(string month)
+        public async Task<int> GenerateForMonthAsync(string month, string userId)
         {
             // 1. Gastos activos
-            var expenses = await _expenseRepository.GetAllActiveAsync();
+            var expenses = await _expenseRepository.GetAllActiveAsync(userId);
 
             // 2. Ids que YA tienen registro ese mes (para no duplicar).
             //    Usamos un HashSet para búsquedas rápidas.

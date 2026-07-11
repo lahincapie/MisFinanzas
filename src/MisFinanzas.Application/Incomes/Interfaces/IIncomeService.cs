@@ -6,15 +6,15 @@ namespace MisFinanzas.Application.Incomes.Interfaces
     public interface IIncomeService
     {
         /// <summary>Crea un ingreso y devuelve el Id generado.</summary>
-        Task<int> CreateAsync(CreateIncomeDto dto);
+        Task<int> CreateAsync(CreateIncomeDto dto, string userId);
 
         /// <summary>Devuelve todos los ingresos activos.</summary>
-        Task<List<IncomeDto>> GetAllAsync();
+        Task<List<IncomeDto>> GetAllAsync(string userId);
 
         /// <summary>Edita un ingreso existente.</summary>
-        Task UpdateAsync(UpdateIncomeDto dto);
+        Task UpdateAsync(UpdateIncomeDto dto, string userId);
 
         /// <summary>Desactiva (soft-delete) un ingreso.</summary>
-        Task DeactivateAsync(int id);
+        Task DeactivateAsync(int id, string userId);
     }
 }

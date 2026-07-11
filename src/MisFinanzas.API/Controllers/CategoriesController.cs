@@ -11,7 +11,7 @@ namespace MisFinanzas.API.Controllers
     [ApiController]
     [Route("api/categories")]
     [Authorize]   // ← ahora este controller exige token válido
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : ApiControllerBase
     {
         private readonly ICategoryService _service;
 
@@ -24,7 +24,7 @@ namespace MisFinanzas.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
         {
-            var newId = await _service.CreateAsync(dto);
+            var newId = await _service.CreateAsync(dto, CurrentUserId);
             return CreatedAtAction(nameof(Create), new { id = newId }, new { id = newId });
         }
 
@@ -32,7 +32,7 @@ namespace MisFinanzas.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var categories = await _service.GetAllAsync();
+            var categories = await _service.GetAllAsync(CurrentUserId);
             return Ok(categories);
         }
 
@@ -41,7 +41,7 @@ namespace MisFinanzas.API.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
         {
             dto.Id = id;                       // el Id de la ruta es la fuente de verdad
-            await _service.UpdateAsync(dto);
+            await _service.UpdateAsync(dto, CurrentUserId);
             return NoContent();
         }
 
@@ -49,7 +49,7 @@ namespace MisFinanzas.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deactivate(int id)
         {
-            await _service.DeactivateAsync(id);
+            await _service.DeactivateAsync(id, CurrentUserId);
             return NoContent();
         }
     }

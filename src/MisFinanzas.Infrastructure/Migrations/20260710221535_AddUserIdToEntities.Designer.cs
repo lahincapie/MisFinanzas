@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MisFinanzas.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MisFinanzas.Infrastructure.Persistence;
 namespace MisFinanzas.Infrastructure.Migrations
 {
     [DbContext(typeof(MisFinanzasDbContext))]
-    partial class MisFinanzasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260710221535_AddUserIdToEntities")]
+    partial class AddUserIdToEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

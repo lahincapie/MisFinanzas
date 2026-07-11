@@ -24,13 +24,13 @@ namespace MisFinanzas.Application.Incomes.Services
             _updateValidator = updateValidator;
         }
 
-        public async Task<int> CreateAsync(CreateIncomeDto dto)
+        public async Task<int> CreateAsync(CreateIncomeDto dto, string userId)
         {
             // 1. Validación de forma
             await _createValidator.ValidateAndThrowAsync(dto);
 
             // 2. Nombre único
-            if (await _repository.ExistsByNameAsync(dto.Name))
+            if (await _repository.ExistsByNameAsync(dto.Name, userId))
                 throw new InvalidOperationException("Ya existe un ingreso con ese nombre.");
 
             // 3. DTO -> entidad
@@ -43,6 +43,7 @@ namespace MisFinanzas.Application.Incomes.Services
                 ExpectedReceiptDay = dto.ExpectedReceiptDay,
                 StartMonth = dto.StartMonth,
                 EndMonth = dto.EndMonth,
+                UserId = userId,              // ← el dueño
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
             };
@@ -54,9 +55,9 @@ namespace MisFinanzas.Application.Incomes.Services
             return income.Id;
         }
 
-        public async Task<List<IncomeDto>> GetAllAsync()
+        public async Task<List<IncomeDto>> GetAllAsync(string userId)
         {
-            var incomes = await _repository.GetAllActiveAsync();
+            var incomes = await _repository.GetAllActiveAsync(userId);
 
             return incomes.Select(i => new IncomeDto
             {
@@ -71,18 +72,18 @@ namespace MisFinanzas.Application.Incomes.Services
             }).ToList();
         }
 
-        public async Task UpdateAsync(UpdateIncomeDto dto)
+        public async Task UpdateAsync(UpdateIncomeDto dto, string userId)
         {
             // 1. Validación de forma
             await _updateValidator.ValidateAndThrowAsync(dto);
 
             // 2. Debe existir
-            var income = await _repository.GetByIdAsync(dto.Id);
+            var income = await _repository.GetByIdAsync(dto.Id, userId);
             if (income is null)
                 throw new KeyNotFoundException("El ingreso no existe.");
 
             // 3. Nombre único, excluyendo el propio
-            if (await _repository.ExistsByNameAsync(dto.Name, dto.Id))
+            if (await _repository.ExistsByNameAsync(dto.Name, userId, dto.Id))
                 throw new InvalidOperationException("Ya existe otro ingreso con ese nombre.");
 
             // 4. Modificar
@@ -99,9 +100,9 @@ namespace MisFinanzas.Application.Incomes.Services
             await _repository.SaveChangesAsync();
         }
 
-        public async Task DeactivateAsync(int id)
+        public async Task DeactivateAsync(int id, string userId)
         {
-            var income = await _repository.GetByIdAsync(id);
+            var income = await _repository.GetByIdAsync(id, userId);
             if (income is null)
                 throw new KeyNotFoundException("El ingreso no existe.");
 

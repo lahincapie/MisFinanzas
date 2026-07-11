@@ -8,6 +8,9 @@ namespace MisFinanzas.Domain.Categories
     /// </summary>
     public class Category : BaseEntity
     {
+        /// <summary>Id del usuario dueño de esta categoría.</summary>
+        public string UserId { get; set; } = string.Empty;
+
         /// <summary>Nombre de la categoría. Obligatorio y único por usuario.</summary>
         public string Name { get; set; } = string.Empty;
 

@@ -19,21 +19,21 @@ namespace MisFinanzas.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Category>> GetAllActiveAsync()
+        public async Task<List<Category>> GetAllActiveAsync(string userId)
         {
             return await _context.Categories
-                .Where(c => c.IsActive)
+                .Where(c => c.IsActive && c.UserId == userId)
                 .OrderBy(c => c.Order)
                 .ToListAsync();
         }
 
-        public async Task<Category?> GetByIdAsync(int id)
+        public async Task<Category?> GetByIdAsync(int id, string userId)
         {
             return await _context.Categories
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsActive);
         }
 
-        public async Task<bool> ExistsByNameAsync(string name, int? excludeId = null)
+        public async Task<bool> ExistsByNameAsync(string name, string userId, int? excludeId = null)
         {
             return await _context.Categories
                 .AnyAsync(c => c.IsActive
