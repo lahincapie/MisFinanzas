@@ -51,5 +51,19 @@ namespace MisFinanzas.Infrastructure.Repositories
             return await _context.IncomeReceipts
                 .FirstOrDefaultAsync(r => r.IsActive && r.IncomeMonthlyId == incomeMonthlyId);
         }
+
+        public async Task<List<IncomeMonthly>> GetMonthWithDetailsAsync(string month, string userId)
+        {
+            return await _context.IncomeMonthlies
+                .Where(m => m.IsActive
+                    && m.Month == month
+                    && m.Income!.IsActive
+                    && m.Income.UserId == userId)       // ← solo los del usuario
+                .Include(m => m.Income)                  // trae el ingreso
+                .Include(m => m.Receipts.Where(r => r.IsActive))   // y su recepción ACTIVA
+                .OrderBy(m => m.Income!.Name)
+                .ToListAsync();
+        }
+
     }
 }

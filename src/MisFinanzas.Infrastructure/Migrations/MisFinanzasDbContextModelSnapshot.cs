@@ -199,7 +199,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.Expenses.Expense", b =>
@@ -270,7 +270,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.Expenses.ExpenseMonthly", b =>
@@ -309,7 +309,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasIndex("ExpenseId");
 
-                    b.ToTable("ExpenseMonthlies");
+                    b.ToTable("ExpenseMonthlies", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.Expenses.ExpensePayment", b =>
@@ -356,7 +356,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("ExpensePayments");
+                    b.ToTable("ExpensePayments", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.Incomes.Income", b =>
@@ -410,7 +410,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Incomes");
+                    b.ToTable("Incomes", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.Incomes.IncomeMonthly", b =>
@@ -449,7 +449,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasIndex("IncomeId");
 
-                    b.ToTable("IncomeMonthlies");
+                    b.ToTable("IncomeMonthlies", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.Incomes.IncomeReceipt", b =>
@@ -491,7 +491,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasIndex("IncomeMonthlyId");
 
-                    b.ToTable("IncomeReceipts");
+                    b.ToTable("IncomeReceipts", (string)null);
                 });
 
             modelBuilder.Entity("MisFinanzas.Domain.PaymentMethods.PaymentMethod", b =>
@@ -522,7 +522,7 @@ namespace MisFinanzas.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("PaymentMethods", (string)null);
 
                     b.HasData(
                         new

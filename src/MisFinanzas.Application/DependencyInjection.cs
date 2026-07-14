@@ -4,6 +4,8 @@ using MisFinanzas.Application.Auth.Interfaces;
 using MisFinanzas.Application.Auth.Services;
 using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Categories.Services;
+using MisFinanzas.Application.Dashboard.Interfaces;
+using MisFinanzas.Application.Dashboard.Services;
 using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Application.Expenses.Services;
 using MisFinanzas.Application.Incomes.Interfaces;
@@ -32,7 +34,7 @@ namespace MisFinanzas.Application
             services.AddScoped<IIncomeMonthlyService, IncomeMonthlyService>();
             services.AddScoped<IIncomeReceiptService, IncomeReceiptService>();
             services.AddScoped<IAuthService, AuthService>();
-            
+            services.AddScoped<IDashboardService, DashboardService>();
 
             return services;
         }

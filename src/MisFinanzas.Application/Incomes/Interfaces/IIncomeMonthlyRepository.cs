@@ -16,5 +16,9 @@ namespace MisFinanzas.Application.Incomes.Interfaces
         Task<IncomeMonthly?> GetByIncomeAndMonthAsync(int incomeId, string month);
         Task AddReceiptAsync(IncomeReceipt receipt);
         Task<IncomeReceipt?> GetActiveReceiptAsync(int incomeMonthlyId);
+
+        /// <summary>Trae los registros mensuales de ingreso de un mes, con su ingreso y su recepción activa.</summary>
+        Task<List<IncomeMonthly>> GetMonthWithDetailsAsync(string month, string userId);
+
     }
 }

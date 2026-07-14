@@ -27,5 +27,12 @@ namespace MisFinanzas.Application.Expenses.Interfaces
 
         /// <summary>Devuelve el pago activo de un registro mensual, si existe. Null si no hay.</summary>
         Task<ExpensePayment?> GetActivePaymentAsync(int expenseMonthlyId);
+
+        /// <summary>Trae los registros mensuales de gasto de un mes, con su gasto, categoría y pago activo.</summary>
+        Task<List<ExpenseMonthly>> GetMonthWithDetailsAsync(string month, string userId);
+
+        /// <summary>Promedio de los últimos N pagos activos de un gasto (0 si no hay histórico).</summary>
+        Task<decimal> GetAveragePaymentAsync(int expenseId, int lastN = 3);
+
     }
 }

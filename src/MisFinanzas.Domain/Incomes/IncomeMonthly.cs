@@ -19,5 +19,8 @@ namespace MisFinanzas.Domain.Incomes
 
         /// <summary>Estado del registro en el mes: Pendiente o Recibido.</summary>
         public IncomeStatus Status { get; set; } = IncomeStatus.Pending;
+
+        /// <summary>Recepciones de este registro mensual (solo una activa a la vez).</summary>
+        public ICollection<IncomeReceipt> Receipts { get; set; } = new List<IncomeReceipt>();
     }
 }

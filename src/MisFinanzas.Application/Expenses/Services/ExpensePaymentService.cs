@@ -15,15 +15,18 @@ namespace MisFinanzas.Application.Expenses.Services
         private readonly IExpenseMonthlyRepository _monthlyRepository;
         private readonly IPaymentMethodRepository _paymentMethodRepository;
         private readonly IValidator<RegisterExpensePaymentDto> _validator;
+        private readonly IExpenseRepository _expenseRepository;
 
         public ExpensePaymentService(
             IExpenseMonthlyRepository monthlyRepository,
             IPaymentMethodRepository paymentMethodRepository,
-            IValidator<RegisterExpensePaymentDto> validator)
+            IValidator<RegisterExpensePaymentDto> validator,
+            IExpenseRepository expenseRepository)
         {
             _monthlyRepository = monthlyRepository;
             _paymentMethodRepository = paymentMethodRepository;
             _validator = validator;
+            _expenseRepository = expenseRepository;
         }
 
         public async Task RegisterPaymentAsync(int expenseId, string month, RegisterExpensePaymentDto dto, string userId)
@@ -31,20 +34,25 @@ namespace MisFinanzas.Application.Expenses.Services
             // 1. Validación de forma
             await _validator.ValidateAndThrowAsync(dto);
 
-            // 2. El registro mensual debe existir
+            // 2. El gasto debe existir y pertenecer al usuario autenticado
+            var expense = await _expenseRepository.GetByIdAsync(expenseId, userId);
+            if (expense is null)
+                throw new KeyNotFoundException("El gasto no existe o no te pertenece.");
+
+            // 3. El registro mensual debe existir
             var monthly = await _monthlyRepository.GetByExpenseAndMonthAsync(expenseId, month);
             if (monthly is null)
                 throw new KeyNotFoundException("No existe un registro pendiente para ese gasto y mes.");
 
-            // 3. Debe estar en estado Pendiente
+            // 4. Debe estar en estado Pendiente
             if (monthly.Status != ExpenseStatus.Pending)
                 throw new InvalidOperationException("El gasto de ese mes ya está pagado.");
 
-            // 4. El medio de pago debe existir
+            // 5. El medio de pago debe existir
             if (!await _paymentMethodRepository.ExistsAsync(dto.PaymentMethodId))
                 throw new KeyNotFoundException("El medio de pago seleccionado no existe.");
 
-            // 5. Crear el pago
+            // 6. Crear el pago
             var payment = new ExpensePayment
             {
                 ExpenseMonthlyId = monthly.Id,
@@ -57,26 +65,32 @@ namespace MisFinanzas.Application.Expenses.Services
             };
             await _monthlyRepository.AddPaymentAsync(payment);
 
-            // 6. Cambiar el estado del registro mensual a Pagado
+            // 7. Cambiar el estado del registro mensual a Pagado
             monthly.Status = ExpenseStatus.Paid;
             monthly.UpdatedAt = DateTime.UtcNow;
 
-            // 7. Guardar todo junto (el pago nuevo + el cambio de estado)
+            // 8. Guardar todo junto (el pago nuevo + el cambio de estado)
             await _monthlyRepository.SaveChangesAsync();
         }
 
         public async Task RevertPaymentAsync(int expenseId, string month, string userId)
         {
-            // 1. El registro mensual debe existir
+            // 1. El gasto debe existir y pertenecer al usuario autenticado
+            var expense = await _expenseRepository.GetByIdAsync(expenseId, userId);
+            if (expense is null)
+                throw new KeyNotFoundException("El gasto no existe o no te pertenece.");
+
+            // 2. El registro mensual debe existir
             var monthly = await _monthlyRepository.GetByExpenseAndMonthAsync(expenseId, month);
             if (monthly is null)
                 throw new KeyNotFoundException("No existe un registro para ese gasto y mes.");
 
-            // 2. Debe estar Pagado para poder revertir
+            
+            // 3. Debe estar Pagado para poder revertir
             if (monthly.Status != ExpenseStatus.Paid)
                 throw new InvalidOperationException("El gasto de ese mes no está pagado.");
 
-            // 3. Marcar el pago activo como inactivo (se conserva para historial)
+            // 4. Marcar el pago activo como inactivo (se conserva para historial)
             var payment = await _monthlyRepository.GetActivePaymentAsync(monthly.Id);
             if (payment is not null)
             {
@@ -84,11 +98,11 @@ namespace MisFinanzas.Application.Expenses.Services
                 payment.UpdatedAt = DateTime.UtcNow;
             }
 
-            // 4. Devolver el registro mensual a Pendiente
+            // 5. Devolver el registro mensual a Pendiente
             monthly.Status = ExpenseStatus.Pending;
             monthly.UpdatedAt = DateTime.UtcNow;
 
-            // 5. Guardar todo junto
+            // 6. Guardar todo junto
             await _monthlyRepository.SaveChangesAsync();
         }
 

@@ -19,5 +19,9 @@ namespace MisFinanzas.Domain.Expenses
 
         /// <summary>Estado del registro en el mes: Pendiente o Pagado.</summary>
         public ExpenseStatus Status { get; set; } = ExpenseStatus.Pending;
+
+        /// <summary>Pagos de este registro mensual (solo uno activo a la vez; los revertidos quedan inactivos).</summary>
+        public ICollection<ExpensePayment> Payments { get; set; } = new List<ExpensePayment>();
+
     }
 }
