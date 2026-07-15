@@ -124,5 +124,34 @@ namespace MisFinanzas.Application.Tests
             // Assert: aún no llega el 31 → no vencido
             Assert.False(resultado);
         }
+
+        [Fact]
+        public void IsOverdue_HoyEsElDiaExactoDeVencimiento_TodaviaNoEstaVencido()
+        {
+            // dueDay = 20 y hoy es 20. El código usa '>', no '>=':
+            // el propio día del vencimiento aún cuenta como "al día".
+            var hoy = new DateTime(2026, 7, 20);
+            var vencido = ProjectionCalculator.IsOverdue(ExpenseStatus.Pending, "2026-07", 20, hoy);
+            Assert.False(vencido);
+        }
+
+        [Fact]
+        public void IsOverdue_UnDiaDespuesDelVencimiento_SiEstaVencido()
+        {
+            // El espejo del anterior: al día siguiente, ya está vencido.
+            var hoy = new DateTime(2026, 7, 21);
+            var vencido = ProjectionCalculator.IsOverdue(ExpenseStatus.Pending, "2026-07", 20, hoy);
+            Assert.True(vencido);
+        }
+
+        [Fact]
+        public void IsOverdue_DiaVence31EnFebreroBisiesto_SeAjustaAl29()
+        {
+            // 2028 es bisiesto: febrero tiene 29 días. Vence 31 → se ajusta al 29.
+            // Hoy = 29 feb: es el día límite exacto, todavía NO vencido (usa '>').
+            var hoy = new DateTime(2028, 2, 29);
+            var vencido = ProjectionCalculator.IsOverdue(ExpenseStatus.Pending, "2028-02", 31, hoy);
+            Assert.False(vencido);
+        }
     }
 }

@@ -105,5 +105,17 @@ namespace MisFinanzas.Application.Tests
                 periodicity, startMonth: null, endMonth: null, targetMonth);
             Assert.True(aplica);
         }
+
+        [Theory]
+        [InlineData(Periodicity.Bimonthly, "2025-11", "2025-12", false)] // distancia 1 → no
+        [InlineData(Periodicity.Bimonthly, "2025-11", "2026-01", true)]  // distancia 2, cruzó el año → sí
+        [InlineData(Periodicity.Annual, "2024-03", "2026-03", true)]  // distancia 24, dos años exactos → sí
+        public void AppliesToMonth_CruzaElCambioDeAnio(
+    Periodicity periodicity, string startMonth, string targetMonth, bool esperado)
+        {
+            var aplica = ScheduleCalculator.AppliesToMonth(
+                periodicity, startMonth, endMonth: null, targetMonth);
+            Assert.Equal(esperado, aplica);
+        }
     }
 }
