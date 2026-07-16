@@ -9,6 +9,7 @@ Nace de un problema real: reemplazar una hoja de cálculo donde llevaba manualme
 ![EF Core](https://img.shields.io/badge/EF%20Core-9.0-512BD4)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![CI](https://github.com/lahincapie/MisFinanzas/actions/workflows/ci.yml/badge.svg)](https://github.com/lahincapie/MisFinanzas/actions/workflows/ci.yml)
 
 ---
 
