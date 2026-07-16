@@ -1,0 +1,34 @@
+name: CI
+
+# ¿CUÁNDO corre? En cada push y en cada pull request.
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    # ¿DÓNDE? En una máquina Linux que GitHub enciende y apaga por mí.
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Traer el código del repositorio a la máquina.
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Instalar el SDK de .NET, con la versión FIJA (no la que el server elija).
+      - name: Instalar .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      # 3. Restaurar los paquetes NuGet de la solución.
+      - name: Restaurar dependencias
+        run: dotnet restore
+
+      # 4. Compilar en modo Release, sin volver a restaurar.
+      - name: Compilar
+        run: dotnet build --no-restore --configuration Release
+
+      # 5. Correr los 49 tests. Si alguno falla, el workflow sale ROJO.
+      - name: Ejecutar pruebas
+        run: dotnet test --no-build --configuration Release --verbosity normal
