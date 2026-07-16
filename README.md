@@ -4,12 +4,12 @@ API REST para la gestión de finanzas personales. Automatiza el registro de gast
 
 Nace de un problema real: reemplazar una hoja de cálculo donde llevaba manualmente el control de mis cuentas mensuales.
 
+[![CI](https://github.com/lahincapie/MisFinanzas/actions/workflows/ci.yml/badge.svg)](https://github.com/lahincapie/MisFinanzas/actions/workflows/ci.yml)
 ![.NET](https://img.shields.io/badge/.NET-9.0-512BD4)
 ![C#](https://img.shields.io/badge/C%23-13.0-239120)
 ![EF Core](https://img.shields.io/badge/EF%20Core-9.0-512BD4)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927)
 ![License](https://img.shields.io/badge/license-MIT-green)
-[![CI](https://github.com/lahincapie/MisFinanzas/actions/workflows/ci.yml/badge.svg)](https://github.com/lahincapie/MisFinanzas/actions/workflows/ci.yml)
 
 ---
 
@@ -349,14 +349,33 @@ Todos los endpoints excepto los de autenticación requieren la cabecera `Authori
 
 ## Pruebas
 
+### Pruebas unitarias
+
+El proyecto incluye **49 pruebas unitarias** (xUnit) sobre la lógica de negocio pura, aislada en clases sin dependencias:
+
+- **Reglas de proyección** (`ProjectionCalculator`): las reglas asimétricas de gastos e ingresos fijos y variables, incluido el criterio conservador del ingreso variable.
+- **Estados calculados**: vencido y atrasado, con la fecha inyectada como parámetro para poder simular cualquier día.
+- **Periodicidad y vigencia** (`ScheduleCalculator`): la traducción del enum a su salto real en meses y el cálculo de a qué meses aplica cada plantilla.
+- **Casos borde**: mes corto (febrero), año bisiesto, cruce de año, el día exacto del vencimiento y la periodicidad inválida que lanza excepción.
+
+Se ejecutan en menos de tres segundos, sin base de datos, porque prueban lógica pura.
+
+```bash
+dotnet test
+```
+
+### Integración continua
+
+Cada `push` dispara un workflow de **GitHub Actions** que compila la solución en modo Release y ejecuta las 49 pruebas de forma automática. El estado se refleja en el badge de la cabecera.
+
+### Pruebas manuales
+
 El repositorio incluye colecciones de Postman con más de 130 peticiones:
 
 - **Por módulo**: para probar endpoints de forma individual.
 - **Por usuario**: cada carpeta contiene el flujo completo de un usuario, con datos de ejemplo. Ejecutable con el *Collection Runner* para cargar un escenario de prueba completo.
 
 Los scripts gestionan automáticamente los tokens y encadenan los identificadores generados entre peticiones.
-
-Las pruebas automatizadas (unitarias e integración) están contempladas en la siguiente fase.
 
 ---
 
@@ -371,8 +390,8 @@ Las pruebas automatizadas (unitarias e integración) están contempladas en la s
 | Autenticación (Identity + JWT) | ✅ Completo |
 | Multiusuario | ✅ Completo |
 | Dashboard | ✅ Completo |
-| Pruebas automatizadas | 🔜 Siguiente |
-| Integración continua | 🔜 Planificado |
+| Pruebas unitarias (49 tests) | ✅ Completo |
+| Integración continua (GitHub Actions) | ✅ Completo |
 | Frontend (Angular) | 🔜 Planificado |
 
 ---
