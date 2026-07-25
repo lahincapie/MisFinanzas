@@ -1,0 +1,83 @@
+.dashboard-container {
+    padding: 2rem;
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.metric-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #666666;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.metric-value.income {
+    color: #2e7d32;
+}
+
+.metric-value.expense {
+    color: #c62828;
+}
+
+.list-table {
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+h2 {
+    margin-top: 2rem;
+}
+
+.flag {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.flag.overdue {
+    background-color: #ffebee;
+    color: #c62828;
+}
+.month-nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.month-current {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    min-width: 140px;
+    text-align: center;
+}
+.generate-btn {
+    margin-bottom: 1rem;
+}
+.pay-card {
+    margin-bottom: 2rem;
+}
+
+.pay-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}

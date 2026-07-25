@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MisFinanzas.Application.PaymentMethods.Interfaces;
+using MisFinanzas.Domain.PaymentMethods;
 using MisFinanzas.Infrastructure.Persistence;
 
 namespace MisFinanzas.Infrastructure.Repositories
@@ -18,6 +19,14 @@ namespace MisFinanzas.Infrastructure.Repositories
         {
             return await _context.PaymentMethods
                 .AnyAsync(p => p.IsActive && p.Id == id);
+        }
+
+        public async Task<List<PaymentMethod>> GetAllActiveAsync()
+        {
+            return await _context.PaymentMethods
+                .Where(p => p.IsActive)
+                .OrderBy(p => p.Id)
+                .ToListAsync();
         }
     }
 }

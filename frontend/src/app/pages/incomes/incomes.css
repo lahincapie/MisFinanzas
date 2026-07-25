@@ -1,0 +1,18 @@
+.incomes-container {
+    padding: 2rem;
+}
+
+.form-card {
+    margin-bottom: 1.5rem;
+}
+
+.income-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.incomes-table {
+    width: 100%;
+}

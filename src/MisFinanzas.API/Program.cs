@@ -36,6 +36,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 // ---------- Pipeline de middlewares (el ORDEN importa) ----------
@@ -53,6 +63,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // 3. Primero autenticación (¿quién eres?), luego autorización (¿puedes?)
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 
