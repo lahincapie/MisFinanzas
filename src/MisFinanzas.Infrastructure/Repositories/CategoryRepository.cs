@@ -37,8 +37,9 @@ namespace MisFinanzas.Infrastructure.Repositories
         {
             return await _context.Categories
                 .AnyAsync(c => c.IsActive
+                    && c.UserId == userId                          
                     && c.Name.ToLower() == name.ToLower()
-                    && (excludeId == null || c.Id != excludeId.Value));
+                    && (excludeId == null || c.Id != excludeId));
         }
 
         public async Task AddAsync(Category category)
