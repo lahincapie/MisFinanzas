@@ -85,4 +85,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  @if (filteredExpenses().length === 0) {
+    <p class="empty-msg">No hay gastos que coincidan.</p>
+  }
 </div>

@@ -1,10 +1,13 @@
 <div class="dashboard-container">
   <h1>Dashboard</h1>
 
-  <div class="month-nav">
-    <button matButton type="button" (click)="changeMonth(-1)">‹ Anterior</button>
-    <span class="month-current">{{ currentMonth() + '-01' | date:'MMMM yyyy' }}</span>
-    <button matButton type="button" (click)="changeMonth(1)">Siguiente ›</button>
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <div class="month-nav">
+      <button matIconButton type="button" (click)="changeMonth(-1)"><mat-icon>chevron_left</mat-icon></button>
+      <span class="month-current">{{ currentMonth() + '-01' | date:'MMMM yyyy' }}</span>
+      <button matIconButton type="button" (click)="changeMonth(1)"><mat-icon>chevron_right</mat-icon></button>
+    </div>
   </div>
 
   <button matButton="filled" type="button" class="generate-btn" (click)="generatePendings()">
@@ -12,41 +15,47 @@
   </button>
 
   @if (data(); as d) {
-    <p class="section-label">Lo real · lo que ya ocurrió</p>
-    <div class="metrics">
-      <div class="metric-card income">
-        <span class="metric-label">Ingresos reales</span>
-        <span class="metric-value income">{{ d.realIncome | currency:'COP' }}</span>
-        <span class="metric-sub">{{ incomesReceivedCount() }} de {{ incomesTotal() }} recibidos</span>
+    <div class="metrics-columns">
+      <div class="metrics-col">
+        <p class="section-label">Lo real · lo que ya ocurrió</p>
+        <div class="metrics-stack">
+          <div class="metric-card income">
+            <span class="metric-label">Ingresos reales</span>
+            <span class="metric-value income">{{ d.realIncome | currency:'COP' }}</span>
+            <span class="metric-sub">{{ incomesReceivedCount() }} de {{ incomesTotal() }} recibidos</span>
+          </div>
+          <div class="metric-card expense">
+            <span class="metric-label">Gastos reales</span>
+            <span class="metric-value expense">{{ d.realExpense | currency:'COP' }}</span>
+            <span class="metric-sub">{{ expensesPaidCount() }} de {{ expensesTotal() }} pagados</span>
+          </div>
+          <div class="metric-card balance">
+            <span class="metric-label">Balance real</span>
+            <span class="metric-value">{{ d.realBalance | currency:'COP' }}</span>
+            <span class="metric-sub">ingresos − gastos del mes</span>
+          </div>
+        </div>
       </div>
-      <div class="metric-card expense">
-        <span class="metric-label">Gastos reales</span>
-        <span class="metric-value expense">{{ d.realExpense | currency:'COP' }}</span>
-        <span class="metric-sub">{{ expensesPaidCount() }} de {{ expensesTotal() }} pagados</span>
-      </div>
-      <div class="metric-card balance">
-        <span class="metric-label">Balance real</span>
-        <span class="metric-value">{{ d.realBalance | currency:'COP' }}</span>
-        <span class="metric-sub">ingresos − gastos del mes</span>
-      </div>
-    </div>
 
-    <p class="section-label">Lo proyectado · cómo terminará el mes</p>
-    <div class="metrics">
-      <div class="metric-card income">
-        <span class="metric-label">Ingresos proyectados</span>
-        <span class="metric-value income">{{ d.projectedIncome | currency:'COP' }}</span>
-        <span class="metric-sub">estimado por recibir</span>
-      </div>
-      <div class="metric-card expense">
-        <span class="metric-label">Gastos proyectados</span>
-        <span class="metric-value expense">{{ d.projectedExpense | currency:'COP' }}</span>
-        <span class="metric-sub">{{ expensesPendingCount() }} pendientes estimados</span>
-      </div>
-      <div class="metric-card balance">
-        <span class="metric-label">Balance proyectado</span>
-        <span class="metric-value">{{ d.projectedBalance | currency:'COP' }}</span>
-        <span class="metric-sub">(real + proyectado)</span>
+      <div class="metrics-col">
+        <p class="section-label">Lo proyectado · cómo terminará el mes</p>
+        <div class="metrics-stack">
+          <div class="metric-card income">
+            <span class="metric-label">Ingresos proyectados</span>
+            <span class="metric-value income">{{ d.projectedIncome | currency:'COP' }}</span>
+            <span class="metric-sub">estimado por recibir</span>
+          </div>
+          <div class="metric-card expense">
+            <span class="metric-label">Gastos proyectados</span>
+            <span class="metric-value expense">{{ d.projectedExpense | currency:'COP' }}</span>
+            <span class="metric-sub">{{ expensesPendingCount() }} pendientes estimados</span>
+          </div>
+          <div class="metric-card balance">
+            <span class="metric-label">Balance proyectado</span>
+            <span class="metric-value">{{ d.projectedBalance | currency:'COP' }}</span>
+            <span class="metric-sub">(real + proyectado)</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -97,6 +106,8 @@
                 }
               </div>
             </div>
+          } @empty {
+            <p class="empty-msg">No hay gastos este mes. Usa "Generar pendientes".</p>
           }
         </div>
       </div>
@@ -147,12 +158,16 @@
                 }
               </div>
             </div>
+          } @empty {
+            <p class="empty-msg">No hay ingresos este mes. Usa "Generar pendientes".</p>
           }
         </div>
       </div>
     </div>
 
   } @else {
-    <p>Cargando...</p>
+    <div class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
   }
 </div>

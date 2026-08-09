@@ -52,3 +52,11 @@
     font-size: 0.78rem;
     color: var(--color-muted);
 }
+.cat-card {
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.cat-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}

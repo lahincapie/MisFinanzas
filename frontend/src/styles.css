@@ -169,4 +169,13 @@ body {
 
 .empty-msg {
     color: var(--color-muted);
+    text-align: center;
+    padding: 1.5rem 0;
+}
+.data-table .mat-mdc-row {
+    transition: background-color 0.15s;
+}
+
+.data-table .mat-mdc-row:hover {
+    background-color: var(--color-bg);
 }

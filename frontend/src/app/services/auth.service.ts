@@ -43,6 +43,18 @@ export class AuthService {
       return null;
     }
   }
+
+  getUserName(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+      return payload.displayName || null;
+    } catch {
+      return null;
+    }
+  }
   private saveToken(token: string): void {
     sessionStorage.setItem(this.tokenKey, token);
   }

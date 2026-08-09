@@ -14,8 +14,16 @@ export class Layout {
   private router = inject(Router);
 
   userEmail = this.auth.getUserEmail();
+  userName = this.auth.getUserName() || this.buildNameFromEmail();
 
-  logout(): void {
+  private buildNameFromEmail(): string {
+    const email = this.auth.getUserEmail();
+    if (!email) return 'Usuario';
+    const raw = email.split('@')[0];
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  }
+
+   logout(): void {
     this.auth.logout();
     this.router.navigate(['/login']);
   }

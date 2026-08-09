@@ -17,10 +17,11 @@ import { PaymentMethod } from '../../models/payment-method.models';
 import { PayDialog } from './pay-dialog/pay-dialog';
 import { ReceiveDialog } from './receive-dialog/receive-dialog';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CurrencyPipe, DatePipe, MatButtonModule, MatIconModule],
+  imports: [CurrencyPipe, DatePipe, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

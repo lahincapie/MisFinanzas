@@ -1,13 +1,16 @@
 <div class="layout">
   <aside class="sidebar">
     <div class="brand">
-      <h1 class="brand-name">MisFinanzas</h1>
-      <p class="brand-tag">Tu mes, bajo control</p>
+      <div class="brand-logo"><mat-icon>account_balance_wallet</mat-icon></div>
+      <span class="brand-name">Mis<span class="brand-accent">Finanzas</span></span>
     </div>
 
     <div class="user">
-      <div class="avatar">{{ (userEmail || '?').charAt(0).toUpperCase() }}</div>
-      <span class="user-email">{{ userEmail }}</span>
+      <div class="avatar">{{ userName.charAt(0).toUpperCase() }}</div>
+      <div class="user-info">
+        <span class="user-name">{{ userName }}</span>
+        <span class="user-email">{{ userEmail }}</span>
+      </div>
     </div>
 
     <nav class="nav">

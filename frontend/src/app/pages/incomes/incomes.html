@@ -66,4 +66,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
+  @if (filteredIncomes().length === 0) {
+    <p class="empty-msg">No hay ingresos que coincidan.</p>
+  }
 </div>
