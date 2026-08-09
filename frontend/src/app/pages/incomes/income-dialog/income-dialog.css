@@ -1,0 +1,91 @@
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeef2;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.dialog-title-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.title-icon {
+    color: #e6a817;
+}
+
+mat-dialog-actions {
+    border-top: 1px solid #eeeef2;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 480px;
+    padding-top: 0.5rem;
+}
+
+.dialog-form mat-form-field {
+    width: 100%;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+}
+
+.hint {
+    font-weight: 400;
+    color: #9a9aaa;
+    font-size: 0.78rem;
+}
+
+.row-2 {
+    display: flex;
+    gap: 1rem;
+}
+
+.row-2 .field-group {
+    flex: 1;
+}
+
+.toggle-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f5fa;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+}
+
+.toggle-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.toggle-sub {
+    font-size: 0.8rem;
+    color: #9a9aaa;
+}
+
+.info-note {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.82rem;
+    margin: 0.25rem 0 0;
+}

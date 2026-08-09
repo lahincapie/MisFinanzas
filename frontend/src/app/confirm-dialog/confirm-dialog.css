@@ -1,0 +1,44 @@
+.cd-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cd-title-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cd-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+.cd-icon.danger {
+    background: var(--color-expense-soft);
+    color: var(--color-expense);
+}
+
+.cd-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.cd-message {
+    color: var(--color-text);
+    line-height: 1.5;
+    min-width: 340px;
+    margin: 0.5rem 0;
+}
+
+.danger-btn {
+    --mdc-filled-button-container-color: var(--color-expense);
+    --mdc-filled-button-label-text-color: #ffffff;
+}

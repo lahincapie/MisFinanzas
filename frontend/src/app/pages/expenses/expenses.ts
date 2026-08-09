@@ -1,96 +1,46 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { ExpenseService } from '../../services/expense.service';
 import { CategoryService } from '../../services/category.service';
 import { Expense, ExpenseRequest } from '../../models/expense.models';
 import { Category } from '../../models/category.models';
-
-function daysOrderValidator(group: AbstractControl): ValidationErrors | null {
-  const cutoff = group.get('cutoffDay')?.value;
-  const due = group.get('dueDay')?.value;
-  const suspension = group.get('suspensionDay')?.value;
-  if (cutoff == null || due == null || suspension == null) {
-    return null;
-  }
-  return cutoff <= due && due <= suspension ? null : { daysOrder: true };
-}
+import { ExpenseDialog } from './expense-dialog/expense-dialog';
+import { PERIODICITY_LABELS } from '../../shared/options';
+import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-expenses',
-  imports: [
-    CurrencyPipe,
-    ReactiveFormsModule,
-    MatTableModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    MatButtonModule
-  ],
+  imports: [CurrencyPipe, MatTableModule, MatIconModule, MatButtonModule],
   templateUrl: './expenses.html',
   styleUrl: './expenses.css'
 })
 export class Expenses implements OnInit {
   private expenseService = inject(ExpenseService);
   private categoryService = inject(CategoryService);
-  private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
 
   expenses = signal<Expense[]>([]);
   categories = signal<Category[]>([]);
-  isVariableSig = signal(false);
-  editingId = signal<number | null>(null);
   displayedColumns = ['name', 'categoryName', 'periodicity', 'days', 'expected', 'validity', 'actions'];
 
-  readonly periodicityLabels: Record<number, string> = {
-    1: 'Mensual', 2: 'Bimestral', 3: 'Trimestral', 4: 'Semestral', 5: 'Anual'
-  };
+  readonly periodicityLabels = PERIODICITY_LABELS;
 
-  readonly periodicities = [
-    { value: 1, label: 'Mensual' },
-    { value: 2, label: 'Bimestral' },
-    { value: 3, label: 'Trimestral' },
-    { value: 4, label: 'Semestral' },
-    { value: 5, label: 'Anual' }
-  ];
+  searchTerm = signal('');
+  categoryFilter = signal<number | 'all'>('all');
 
-  form = this.fb.group({
-    name: ['', Validators.required],
-    categoryId: [null as number | null, Validators.required],
-    periodicity: [1, Validators.required],
-    isVariable: [false],
-    expectedAmount: [null as number | null, [Validators.required, Validators.min(0)]],
-    cutoffDay: [1, [Validators.required, Validators.min(1), Validators.max(31)]],
-    dueDay: [5, [Validators.required, Validators.min(1), Validators.max(31)]],
-    suspensionDay: [10, [Validators.required, Validators.min(1), Validators.max(31)]],
-    startMonth: [''],
-    endMonth: [''],
-    reference: [''],
-    contract: ['']
-  }, { validators: daysOrderValidator });
-
-  constructor() {
-    this.form.controls.isVariable.valueChanges.subscribe(isVar => {
-      this.isVariableSig.set(!!isVar);
-      const amount = this.form.controls.expectedAmount;
-      if (isVar) {
-        amount.clearValidators();
-        amount.setValue(null);
-      } else {
-        amount.setValidators([Validators.required, Validators.min(0)]);
-      }
-      amount.updateValueAndValidity();
+  filteredExpenses = computed(() => {
+    const term = this.searchTerm().toLowerCase().trim();
+    const catFilter = this.categoryFilter();
+    return this.expenses().filter(e => {
+      const matchesName = !term || e.name.toLowerCase().includes(term);
+      const matchesCat = catFilter === 'all' || e.categoryId === catFilter;
+      return matchesName && matchesCat;
     });
-  }
-
+  });
   ngOnInit(): void {
     this.loadExpenses();
     this.loadCategories();
@@ -110,66 +60,46 @@ export class Expenses implements OnInit {
     });
   }
 
-  startEdit(exp: Expense): void {
-    this.editingId.set(exp.id);
-    this.form.setValue({
-      name: exp.name,
-      categoryId: exp.categoryId,
-      periodicity: exp.periodicity,
-      isVariable: exp.isVariable,
-      expectedAmount: exp.expectedAmount,
-      cutoffDay: exp.cutoffDay,
-      dueDay: exp.dueDay,
-      suspensionDay: exp.suspensionDay,
-      startMonth: exp.startMonth ?? '',
-      endMonth: exp.endMonth ?? '',
-      reference: exp.reference ?? '',
-      contract: exp.contract ?? ''
-    });
+  getCategoryColor(name: string): string {
+    return this.categories().find(c => c.name === name)?.color ?? '#8a8a9a';
   }
 
-  cancelEdit(): void {
-    this.editingId.set(null);
-    this.form.reset({ periodicity: 1, isVariable: false, cutoffDay: 1, dueDay: 5, suspensionDay: 10 });
+  getCategoryIcon(name: string): string {
+    return this.categories().find(c => c.name === name)?.icon ?? 'category';
+  }
+
+  openDialog(exp?: Expense): void {
+    const ref = this.dialog.open(ExpenseDialog, {
+      data: { categories: this.categories(), expense: exp ?? null }
+    });
+    ref.afterClosed().subscribe((result: ExpenseRequest | undefined) => {
+      if (!result) return;
+      const call = exp
+        ? this.expenseService.update(exp.id, result)
+        : this.expenseService.create(result);
+      call.subscribe({
+        next: () => this.loadExpenses(),
+        error: (err) => console.error('Error al guardar gasto:', err)
+      });
+    });
   }
 
   deleteExpense(exp: Expense): void {
-    if (!confirm(`¿Eliminar el gasto "${exp.name}"?`)) return;
-    this.expenseService.delete(exp.id).subscribe({
-      next: () => this.loadExpenses(),
-      error: (err) => console.error('Error al eliminar gasto:', err)
+    const ref = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Desactivar gasto',
+        message: `¿Desactivar el gasto <strong>${exp.name}</strong>? Se ocultará de listas y cálculos, y sus pendientes futuros ya generados también se desactivarán (RF-11).`,
+        confirmLabel: 'Desactivar',
+        icon: 'delete',
+        danger: true
+      }
     });
-  }
-  onSubmit(): void {
-    if (this.form.invalid) return;
-
-    const v = this.form.getRawValue();
-    const request: ExpenseRequest = {
-      name: v.name!,
-      categoryId: v.categoryId!,
-      periodicity: v.periodicity!,
-      isVariable: v.isVariable!,
-      expectedAmount: v.isVariable ? null : v.expectedAmount,
-      cutoffDay: v.cutoffDay!,
-      dueDay: v.dueDay!,
-      suspensionDay: v.suspensionDay!,
-      startMonth: v.startMonth || null,
-      endMonth: v.endMonth || null,
-      reference: v.reference || null,
-      contract: v.contract || null
-    };
-
-    const id = this.editingId();
-    const call = id === null
-      ? this.expenseService.create(request)
-      : this.expenseService.update(id, request);
-
-    call.subscribe({
-      next: () => {
-        this.cancelEdit();
-        this.loadExpenses();
-      },
-      error: (err) => console.error('Error al guardar gasto:', err)
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.expenseService.delete(exp.id).subscribe({
+        next: () => this.loadExpenses(),
+        error: (err) => console.error('Error al eliminar gasto:', err)
+      });
     });
   }
 }

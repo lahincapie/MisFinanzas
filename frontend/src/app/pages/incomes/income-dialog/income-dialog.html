@@ -1,0 +1,111 @@
+<h2 mat-dialog-title class="dialog-header">
+  <span class="dialog-title-text">
+    <mat-icon class="title-icon">savings</mat-icon>
+    {{ isEdit ? 'Editar ingreso' : 'Nuevo ingreso' }}
+  </span>
+  <button matIconButton type="button" (click)="cancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="field-group">
+      <label class="field-label">Nombre <span class="hint">· obligatorio, único</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput formControlName="name" placeholder="Ej: Salario" />
+      </mat-form-field>
+    </div>
+
+    <div class="row-2">
+      <div class="field-group">
+        <label class="field-label">Periodicidad</label>
+        <mat-form-field appearance="outline">
+          <mat-select formControlName="periodicity">
+            @for (p of periodicities; track p.value) {
+              <mat-option [value]="p.value">{{ p.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Día esperado de recepción <span class="hint">· 1 a 31</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" formControlName="expectedReceiptDay" min="1" max="31" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="toggle-box">
+      <div>
+        <div class="toggle-title">¿Es un ingreso variable?</div>
+        <div class="toggle-sub">El monto puede cambiar mes a mes</div>
+      </div>
+      <mat-slide-toggle formControlName="isVariable"></mat-slide-toggle>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Valor esperado <span class="hint">· obligatorio, mayor que 0</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" formControlName="expectedAmount" placeholder="$ 3.500.000" />
+      </mat-form-field>
+      <p class="info-note">Se propone al registrar la recepción y proyecta el mes (el variable proyecta $0 mientras esté pendiente).</p>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Vigencia desde <span class="hint">· opcional</span></label>
+      <div class="row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Mes</mat-label>
+          <mat-select formControlName="startMonthNum">
+            <mat-option value="">—</mat-option>
+            @for (m of months; track m.value) {
+              <mat-option [value]="m.value">{{ m.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Año</mat-label>
+          <mat-select formControlName="startYear">
+            <mat-option value="">—</mat-option>
+            @for (y of years; track y) {
+              <mat-option [value]="y">{{ y }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Vigencia hasta <span class="hint">· opcional</span></label>
+      <div class="row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Mes</mat-label>
+          <mat-select formControlName="endMonthNum">
+            <mat-option value="">—</mat-option>
+            @for (m of months; track m.value) {
+              <mat-option [value]="m.value">{{ m.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Año</mat-label>
+          <mat-select formControlName="endYear">
+            <mat-option value="">—</mat-option>
+            @for (y of years; track y) {
+              <mat-option [value]="y">{{ y }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton type="button" (click)="cancel()">Cancelar</button>
+  <button matButton="filled" type="button" [disabled]="form.invalid" (click)="save()">
+    {{ isEdit ? 'Guardar cambios' : 'Guardar ingreso' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,20 @@
+<h2 mat-dialog-title class="cd-header">
+  <span class="cd-title-block">
+    <span class="cd-icon" [class.danger]="data.danger">
+      <mat-icon>{{ data.icon || 'help' }}</mat-icon>
+    </span>
+    <span class="cd-title">{{ data.title }}</span>
+  </span>
+  <button matIconButton type="button" [mat-dialog-close]="false"><mat-icon>close</mat-icon></button>
+</h2>
+
+<mat-dialog-content>
+  <p class="cd-message" [innerHTML]="data.message"></p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton type="button" [mat-dialog-close]="false">Cancelar</button>
+  <button matButton="filled" type="button" [class.danger-btn]="data.danger" [mat-dialog-close]="true">
+    {{ data.confirmLabel || 'Aceptar' }}
+  </button>
+</mat-dialog-actions>

@@ -17,9 +17,7 @@ export class AuthService {
   }
 
   register(data: RegisterRequest): Observable<AuthResult> {
-    return this.http.post<AuthResult>(`${this.baseUrl}/register`, data).pipe(
-      tap(result => this.saveToken(result.token))
-    );
+    return this.http.post<AuthResult>(`${this.baseUrl}/register`, data);
   }
 
   getToken(): string | null {
@@ -31,9 +29,20 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return this.getToken() !== null;
+    return !!this.getToken();
   }
 
+  getUserEmail(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+      return payload.email ?? null;
+    } catch {
+      return null;
+    }
+  }
   private saveToken(token: string): void {
     sessionStorage.setItem(this.tokenKey, token);
   }

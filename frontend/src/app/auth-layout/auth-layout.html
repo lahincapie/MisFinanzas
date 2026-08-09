@@ -1,0 +1,33 @@
+<div class="auth-bg">
+  <div class="auth-shell">
+    <aside class="auth-brand">
+      <div class="brand-top">
+        <div class="brand-logo"><mat-icon>savings</mat-icon></div>
+        <span class="brand-name">MisFinanzas</span>
+      </div>
+
+      <div class="brand-main">
+        <h1 class="brand-title">Tu mes financiero,<br />bajo control.</h1>
+        <p class="brand-desc">Registra tus gastos e ingresos recurrentes, marca lo que ya pagaste y mira de un vistazo lo real frente a lo proyectado.</p>
+
+        <ul class="brand-features">
+          <li><span class="feat-icon"><mat-icon>dashboard</mat-icon></span> Dashboard mensual con lo real vs. lo proyectado</li>
+          <li><span class="feat-icon"><mat-icon>notifications</mat-icon></span> Alertas de lo vencido y lo por vencer</li>
+          <li><span class="feat-icon"><mat-icon>lock</mat-icon></span> Tus datos, solo tuyos</li>
+        </ul>
+      </div>
+
+      <p class="brand-footer">© 2026 MisFinanzas · Proyecto de portafolio</p>
+    </aside>
+
+    <section class="auth-form-side">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <a routerLink="/login" routerLinkActive="active" class="auth-tab">Ingresar</a>
+          <a routerLink="/register" routerLinkActive="active" class="auth-tab">Crear cuenta</a>
+        </div>
+        <router-outlet />
+      </div>
+    </section>
+  </div>
+</div>

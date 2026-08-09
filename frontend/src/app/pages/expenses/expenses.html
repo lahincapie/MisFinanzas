@@ -1,91 +1,26 @@
 <div class="expenses-container">
-  <h1>Gastos</h1>
+  <div class="page-header">
+    <div>
+      <h1>Gastos</h1>
+      <p class="page-sub">Las plantillas de tus obligaciones recurrentes. Cada mes, el sistema genera sus pendientes.</p>
+    </div>
+    <button matButton="filled" type="button" (click)="openDialog()">+ Nuevo gasto</button>
+  </div>
 
-  <mat-card class="form-card">
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="expense-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input matInput formControlName="name" />
-        </mat-form-field>
+<div class="filters-bar">
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Buscar por nombre..." (input)="searchTerm.set(searchInput.value)" #searchInput />
+    </div>
+    <select class="cat-filter" #catSelect (change)="categoryFilter.set(catSelect.value === 'all' ? 'all' : +catSelect.value)">
+      <option value="all">Todas las categorías</option>
+      @for (cat of categories(); track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+      }
+    </select>
+  </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Categoría</mat-label>
-          <mat-select formControlName="categoryId">
-            @for (cat of categories(); track cat.id) {
-              <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Periodicidad</mat-label>
-          <mat-select formControlName="periodicity">
-            @for (p of periodicities; track p.value) {
-              <mat-option [value]="p.value">{{ p.label }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-slide-toggle formControlName="isVariable">Es variable</mat-slide-toggle>
-
-        @if (!isVariableSig()) {
-          <mat-form-field appearance="outline">
-            <mat-label>Valor esperado</mat-label>
-            <input matInput type="number" formControlName="expectedAmount" />
-          </mat-form-field>
-        }
-
-        <mat-form-field appearance="outline">
-          <mat-label>Día de corte</mat-label>
-          <input matInput type="number" formControlName="cutoffDay" min="1" max="31" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Día de pago</mat-label>
-          <input matInput type="number" formControlName="dueDay" min="1" max="31" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Día de suspensión</mat-label>
-          <input matInput type="number" formControlName="suspensionDay" min="1" max="31" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Vigencia desde</mat-label>
-          <input matInput type="month" formControlName="startMonth" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Vigencia hasta</mat-label>
-          <input matInput type="month" formControlName="endMonth" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Referencia</mat-label>
-          <input matInput formControlName="reference" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Contrato</mat-label>
-          <input matInput formControlName="contract" />
-        </mat-form-field>
-
-        @if (form.hasError('daysOrder')) {
-          <p class="days-error">Los días deben cumplir: corte ≤ pago ≤ suspensión.</p>
-        }
-        <button matButton="filled" type="submit" [disabled]="form.invalid">
-          {{ editingId() === null ? 'Agregar gasto' : 'Guardar cambios' }}
-        </button>
-
-        @if (editingId() !== null) {
-          <button matButton type="button" (click)="cancelEdit()">Cancelar</button>
-        }
-      </form>
-    </mat-card-content>
-  </mat-card>
-
-  <table mat-table [dataSource]="expenses()" class="expenses-table">
+  <table mat-table [dataSource]="filteredExpenses()" class="data-table">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Nombre</th>
       <td mat-cell *matCellDef="let exp">{{ exp.name }}</td>
@@ -93,7 +28,14 @@
 
     <ng-container matColumnDef="categoryName">
       <th mat-header-cell *matHeaderCellDef>Categoría</th>
-      <td mat-cell *matCellDef="let exp">{{ exp.categoryName }}</td>
+      <td mat-cell *matCellDef="let exp">
+        <span class="cat-chip"
+          [style.background-color]="getCategoryColor(exp.categoryName) + '22'"
+          [style.color]="getCategoryColor(exp.categoryName)">
+          <mat-icon>{{ getCategoryIcon(exp.categoryName) }}</mat-icon>
+          {{ exp.categoryName }}
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="periodicity">
@@ -112,8 +54,10 @@
       <th mat-header-cell *matHeaderCellDef>Valor esperado</th>
       <td mat-cell *matCellDef="let exp">
         @if (exp.isVariable) {
-          Variable
+          <span class="type-chip variable">Variable</span>
+          <span class="muted">se digita al pagar</span>
         } @else {
+          <span class="type-chip fijo">Fijo</span>
           {{ exp.expectedAmount | currency:'COP' }}
         }
       </td>
@@ -125,13 +69,19 @@
         {{ exp.startMonth ?? '—' }} → {{ exp.endMonth ?? '∞' }}
       </td>
     </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Acciones</th>
       <td mat-cell *matCellDef="let exp">
-        <button matButton type="button" (click)="startEdit(exp)">Editar</button>
-        <button matButton type="button" (click)="deleteExpense(exp)">Eliminar</button>
+        <button matIconButton type="button" (click)="openDialog(exp)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matIconButton type="button" (click)="deleteExpense(exp)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </td>
     </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>

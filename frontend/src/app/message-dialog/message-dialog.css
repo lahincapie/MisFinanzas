@@ -1,0 +1,31 @@
+.msg-dialog {
+    text-align: center;
+    padding: 1rem 1.5rem;
+    min-width: 320px;
+}
+
+.msg-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.msg-icon mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--color-income);
+}
+
+.msg-dialog h2 {
+    margin: 0.5rem 0 0.25rem;
+}
+
+.msg-dialog p {
+    color: var(--color-muted);
+    margin: 0 0 1.25rem;
+}
+
+.msg-dialog button {
+    min-width: 140px;
+}

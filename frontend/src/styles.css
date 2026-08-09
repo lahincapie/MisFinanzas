@@ -1,1 +1,172 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    /* ---------- Tipografía ---------- */
+    --font-base: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --fs-title: 1.5rem;
+    /* títulos de pantalla */
+    --fs-subtitle: 1.1rem;
+    /* subtítulos / h2 */
+    --fs-label: 0.85rem;
+    /* etiquetas de campos */
+    --fs-body: 0.9rem;
+    /* texto normal */
+    --fs-hint: 0.78rem;
+    /* pistas y notas pequeñas */
+
+    /* ---------- Colores de marca ---------- */
+    --color-primary: #5b4fc4;
+    --color-primary-soft: #ece9ff;
+    --color-income: #2e7d32;
+    --color-income-soft: #e8f5e9;
+    --color-expense: #c62828;
+    --color-expense-soft: #ffebee;
+    --color-warning: #f57f17;
+    --color-warning-soft: #fff8e1;
+
+    /* ---------- Neutros ---------- */
+    --color-sidebar: #1a1a2e;
+    --color-bg: #f4f5fa;
+    --color-surface: #ffffff;
+    --color-text: #1a1a2e;
+    --color-muted: #8a8a9a;
+    --color-border: #e5e5ee;
+    --color-border-soft: #eeeef2;
+
+    /* ---------- Formas ---------- */
+    --radius: 10px;
+    --radius-lg: 12px;
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-base);
+    color: var(--color-text);
+}
+
+/* Para que los montos se alineen en columnas */
+.amount {
+    font-variant-numeric: tabular-nums;
+}/* You can add global styles to this file, and also import other style files */
+/* ========== Estilos compartidos ========== */
+
+/* Encabezado de página */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.page-sub {
+    color: var(--color-muted);
+    margin: 0.25rem 0 0;
+}
+
+/* Barra de filtros / buscador */
+.filters-bar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-surface);
+    border: 1px solid #d5d5e0;
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+    flex: 1;
+    max-width: 360px;
+}
+
+.search-box mat-icon {
+    color: var(--color-muted);
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: var(--fs-body);
+    background: transparent;
+    font-family: var(--font-base);
+}
+
+/* Tabla de datos */
+.data-table {
+    width: 100%;
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-border);
+}
+
+.data-table .mat-mdc-header-row {
+    background-color: var(--color-bg);
+}
+
+.data-table .mat-mdc-header-cell {
+    color: var(--color-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
+
+/* Chips */
+.type-chip {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-right: 6px;
+}
+
+.type-chip.fijo {
+    background-color: var(--color-income-soft);
+    color: var(--color-income);
+}
+
+.type-chip.variable {
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+.cat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cat-chip mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.muted {
+    color: var(--color-muted);
+    font-size: var(--fs-label);
+}
+
+/* Mensajes */
+.error-message {
+    color: var(--color-expense);
+    margin: 0.75rem 0 0;
+}
+
+.empty-msg {
+    color: var(--color-muted);
+}

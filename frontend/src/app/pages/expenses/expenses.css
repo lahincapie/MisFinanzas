@@ -2,22 +2,12 @@
     padding: 2rem;
 }
 
-.form-card {
-    margin-bottom: 1.5rem;
-}
-
-.expense-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: center;
-}
-
-.expenses-table {
-    width: 100%;
-}
-.days-error {
-    color: #d32f2f;
-    width: 100%;
-    margin: 0;
+.cat-filter {
+    border: 1px solid #d5d5e0;
+    border-radius: var(--radius);
+    padding: 0 0.75rem;
+    font-size: var(--fs-body);
+    background: var(--color-surface);
+    cursor: pointer;
+    font-family: var(--font-base);
 }

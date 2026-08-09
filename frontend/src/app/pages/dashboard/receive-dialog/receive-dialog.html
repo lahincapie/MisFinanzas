@@ -1,0 +1,50 @@
+<h2 mat-dialog-title class="dialog-header">
+  <span class="dialog-title-block">
+    <span class="dialog-icon income"><mat-icon>trending_up</mat-icon></span>
+    <span class="dialog-titles">
+      <span class="dialog-title">Registrar recepción</span>
+      <span class="dialog-subtitle">Marca este ingreso como recibido</span>
+    </span>
+  </span>
+  <button matIconButton type="button" (click)="cancel()"><mat-icon>close</mat-icon></button>
+</h2>
+
+<mat-dialog-content>
+  <div class="summary-box income">
+    <div>
+      <div class="summary-name">{{ data.income.name }}</div>
+      <div class="summary-sub">{{ data.month + '-01' | date:'MMMM yyyy' }} · esperado el {{ data.income.expectedReceiptDay }}</div>
+    </div>
+    <div class="summary-right">
+      <div class="summary-label">Valor esperado</div>
+      <div class="summary-value">{{ data.income.projectedAmount | currency:'COP' }}</div>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="dialog-form">
+    <div class="field-group">
+      <label class="field-label">Monto recibido <span class="hint">· editable</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" formControlName="amount" />
+      </mat-form-field>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Fecha de recepción</label>
+      <mat-form-field appearance="outline">
+        <input matInput type="date" formControlName="receiptDate" />
+      </mat-form-field>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Observaciones <span class="hint">· opcional</span></label>
+      <mat-form-field appearance="outline">
+        <textarea matInput formControlName="notes" rows="2" placeholder="Ej: bono trimestral"></textarea>
+      </mat-form-field>
+    </div>
+    <p class="asymmetry-note">Nota la asimetría: aquí <strong>no hay "medio de pago"</strong> — el dinero simplemente llegó.</p>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton type="button" (click)="cancel()">Cancelar</button>
+  <button matButton="filled" type="button" [disabled]="form.invalid" (click)="save()">Confirmar recepción</button>
+</mat-dialog-actions>

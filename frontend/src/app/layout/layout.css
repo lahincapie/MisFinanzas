@@ -1,0 +1,116 @@
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: #1a1a2e;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+}
+
+.brand-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.brand-tag {
+    font-size: 0.7rem;
+    color: #a0a0b0;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #5b4fc4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.user-email {
+    font-size: 0.8rem;
+    color: #c0c0d0;
+    word-break: break-all;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.nav-section {
+    font-size: 0.7rem;
+    color: #808090;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1rem 0 0.25rem;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    color: #d0d0e0;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.nav-link:hover {
+    background-color: #2a2a45;
+}
+
+.nav-link.active {
+    background-color: #5b4fc4;
+    color: #ffffff;
+    box-shadow: inset 4px 0 0 #b3a7ff;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    background: none;
+    border: none;
+    color: #d0d0e0;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.logout:hover {
+    background-color: #2a2a45;
+}
+
+.content {
+    flex: 1;
+    background-color: #f4f5fa;
+    overflow-y: auto;
+}
+.brand {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #2f2f4a;
+}

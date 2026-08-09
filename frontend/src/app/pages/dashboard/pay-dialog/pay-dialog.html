@@ -1,0 +1,59 @@
+<h2 mat-dialog-title class="dialog-header">
+  <span class="dialog-title-block">
+    <span class="dialog-icon expense"><mat-icon>credit_card</mat-icon></span>
+    <span class="dialog-titles">
+      <span class="dialog-title">Registrar pago</span>
+      <span class="dialog-subtitle">Marca este gasto como pagado</span>
+    </span>
+  </span>
+  <button matIconButton type="button" (click)="cancel()"><mat-icon>close</mat-icon></button>
+</h2>
+
+<mat-dialog-content>
+  <div class="summary-box expense">
+    <div>
+      <div class="summary-name">{{ data.expense.name }}</div>
+      <div class="summary-sub">{{ data.month + '-01' | date:'MMMM yyyy' }} · vence el {{ data.expense.dueDay }}</div>
+    </div>
+    <div class="summary-right">
+      <div class="summary-label">Valor esperado</div>
+      <div class="summary-value">{{ data.expense.projectedAmount | currency:'COP' }}</div>
+    </div>
+  </div>
+
+  <form [formGroup]="form" class="dialog-form">
+    <div class="field-group">
+      <label class="field-label">Monto pagado <span class="hint">· editable</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" formControlName="amount" />
+      </mat-form-field>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Fecha de pago</label>
+      <mat-form-field appearance="outline">
+        <input matInput type="date" formControlName="paymentDate" />
+      </mat-form-field>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Medio de pago</label>
+      <mat-form-field appearance="outline">
+        <mat-select formControlName="paymentMethodId">
+          @for (m of data.paymentMethods; track m.id) {
+            <mat-option [value]="m.id">{{ m.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Observaciones <span class="hint">· opcional</span></label>
+      <mat-form-field appearance="outline">
+        <textarea matInput formControlName="notes" rows="2" placeholder="Ej: pago anticipado"></textarea>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton type="button" (click)="cancel()">Cancelar</button>
+  <button matButton="filled" type="button" [disabled]="form.invalid" (click)="save()">Confirmar pago</button>
+</mat-dialog-actions>

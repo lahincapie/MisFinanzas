@@ -1,0 +1,105 @@
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eeeef2;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.dialog-title-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.title-icon {
+    color: #e6a817;
+}
+
+mat-dialog-actions {
+    border-top: 1px solid #eeeef2;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 420px;
+    padding-top: 0.5rem;
+}
+
+.dialog-form mat-form-field {
+    width: 100%;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+}
+
+.hint {
+    font-weight: 400;
+    color: #9a9aaa;
+    font-size: 0.78rem;
+}
+
+.row-2 {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.row-2 .field-group {
+    flex: 1;
+}
+
+.swatches {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.swatch.selected {
+    border-color: #1a1a2e;
+}
+
+.icon-swatches {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.icon-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #d5d5e0;
+    background: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-swatch.selected {
+    border-color: #5b4fc4;
+    background-color: #ece9ff;
+}

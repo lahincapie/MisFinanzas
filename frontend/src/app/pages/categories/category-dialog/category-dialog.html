@@ -1,0 +1,73 @@
+<h2 mat-dialog-title class="dialog-header">
+  <span class="dialog-title-text">
+    <mat-icon class="title-icon">sell</mat-icon>
+    {{ isEdit ? 'Editar categoría' : 'Nueva categoría' }}
+  </span>
+  <button matIconButton type="button" (click)="cancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="field-group">
+      <label class="field-label">Nombre <span class="hint">· obligatorio, único</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput formControlName="name" placeholder="Ej: Mascotas" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Descripción <span class="hint">· opcional</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput formControlName="description" placeholder="Ej: Comida y veterinaria de Firulais" />
+      </mat-form-field>
+    </div>
+
+    <div class="row-2">
+      <div class="field-group">
+        <label class="field-label">Color</label>
+        <div class="swatches">
+          @for (c of colors; track c.value) {
+            <button type="button" class="swatch"
+              [class.selected]="form.controls.color.value === c.value"
+              [style.background-color]="c.value"
+              (click)="selectColor(c.value)"
+              [attr.aria-label]="c.name"></button>
+          }
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Orden <span class="hint">· posición en listas</span></label>
+        <mat-form-field appearance="outline">
+          <input matInput type="number" formControlName="order" min="1" max="50" />
+          @if (form.controls.order.hasError('min') || form.controls.order.hasError('max')) {
+            <mat-error>Entre 1 y 50.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Ícono</label>
+      <div class="icon-swatches">
+        @for (i of icons; track i.value) {
+          <button type="button" class="icon-swatch"
+            [class.selected]="form.controls.icon.value === i.value"
+            (click)="selectIcon(i.value)"
+            [attr.aria-label]="i.name">
+            <mat-icon>{{ i.value }}</mat-icon>
+          </button>
+        }
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton type="button" (click)="cancel()">Cancelar</button>
+  <button matButton="filled" type="button" [disabled]="form.invalid" (click)="save()">
+    {{ isEdit ? 'Guardar cambios' : 'Guardar categoría' }}
+  </button>
+</mat-dialog-actions>

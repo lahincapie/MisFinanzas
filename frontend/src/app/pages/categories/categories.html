@@ -1,91 +1,50 @@
 <div class="categories-container">
-  <h1>Categorías</h1>
+  <div class="page-header">
+    <div>
+      <h1>Categorías</h1>
+      <p class="page-sub">Clasifica tus gastos para poder filtrar y saber en qué se va el dinero.</p>
+    </div>
+    <button matButton="filled" type="button" (click)="openDialog()">+ Nueva categoría</button>
+  </div>
 
-  <mat-card class="form-card">
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="category-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input matInput formControlName="name" />
-        </mat-form-field>
+  <div class="filters-bar">
+    <div class="search-box">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Buscar por nombre..." (input)="searchTerm.set(searchInput.value)" #searchInput />
+    </div>
+  </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Descripción</mat-label>
-          <input matInput formControlName="description" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Color</mat-label>
-          <mat-select formControlName="color">
-            @for (c of colors; track c.value) {
-              <mat-option [value]="c.value">
-                <span
-                  style="display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:8px;vertical-align:middle;"
-                  [style.background-color]="c.value"></span>
-                {{ c.name }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Ícono</mat-label>
-          <mat-select formControlName="icon">
-            @for (i of icons; track i.value) {
-              <mat-option [value]="i.value">
-                <mat-icon style="vertical-align:middle;margin-right:8px;">{{ i.value }}</mat-icon>
-                {{ i.name }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Orden</mat-label>
-          <input matInput type="number" formControlName="order" min="1" max="50" />
-          @if (form.controls.order.hasError('min') || form.controls.order.hasError('max')) {
-            <mat-error>El orden debe estar entre 1 y 50.</mat-error>
-          }
-        </mat-form-field>
-
-        <button matButton="filled" type="submit" [disabled]="form.invalid">
-          {{ editingId() === null ? 'Agregar' : 'Guardar cambios' }}
-        </button>
-
-        @if (editingId() !== null) {
-          <button matButton type="button" (click)="cancelEdit()">Cancelar</button>
-        }
-      </form>
-    </mat-card-content>
-  </mat-card>
-@if (errorMessage()) {
+  @if (errorMessage()) {
     <p class="error-message">{{ errorMessage() }}</p>
   }
-  <table mat-table [dataSource]="categories()" class="categories-table">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Nombre</th>
-      <td mat-cell *matCellDef="let cat">{{ cat.name }}</td>
-    </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>Descripción</th>
-      <td mat-cell *matCellDef="let cat">{{ cat.description }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="order">
-      <th mat-header-cell *matHeaderCellDef>Orden</th>
-      <td mat-cell *matCellDef="let cat">{{ cat.order }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Acciones</th>
-      <td mat-cell *matCellDef="let cat">
-        <button matButton type="button" (click)="startEdit(cat)">Editar</button>
-        <button matButton type="button" (click)="deleteCategory(cat)">Eliminar</button>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+  <div class="cards-grid">
+    @for (cat of filteredCategories(); track cat.id) {
+      <div class="cat-card">
+        <div class="cat-icon" [style.background-color]="(cat.color || '#8a8a9a') + '22'">
+          <mat-icon [style.color]="cat.color || '#8a8a9a'">{{ cat.icon || 'category' }}</mat-icon>
+        </div>
+        <h3 class="cat-name">{{ cat.name }}</h3>
+        <p class="cat-desc">{{ cat.description }}</p>
+        <div class="cat-footer">
+          <span class="cat-usage">
+            @if (usageCount(cat.id) === 0) { Sin uso }
+            @else if (usageCount(cat.id) === 1) { 1 gasto la usa }
+            @else { {{ usageCount(cat.id) }} gastos la usan }
+          </span>
+          <div class="cat-actions">
+            <button matIconButton type="button" (click)="openDialog(cat)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button matIconButton type="button" [disabled]="usageCount(cat.id) > 0" (click)="deleteCategory(cat)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+     @empty {
+      <p class="empty-msg">No hay categorías que coincidan.</p>
+    }
+  </div>
 </div>
