@@ -27,7 +27,8 @@ namespace MisFinanzas.Infrastructure.Auth
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),           // quién es (el Id)
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),     // su email
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // id único del token
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // id único del token
+                new Claim("displayName", user.DisplayName ?? string.Empty)
             };
 
             // 2. La clave secreta y el algoritmo de firma
