@@ -179,3 +179,199 @@ body {
 .data-table .mat-mdc-row:hover {
     background-color: var(--color-bg);
 }
+
+/* ========== Diálogos (compartido) ========== */
+
+/* Encabezado del diálogo */
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-border-soft);
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.dialog-title-text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Botones del pie (con más peso que Material) */
+.mat-mdc-dialog-container mat-dialog-actions {
+    border-top: 1px solid var(--color-border-soft);
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+/* Formulario del diálogo */
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-top: 0.5rem;
+}
+
+.dialog-form mat-form-field {
+    width: 100%;
+}
+
+/* Grupos de campo con etiqueta propia */
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-label {
+    font-weight: 600;
+    font-size: var(--fs-label);
+    margin-bottom: 0.4rem;
+}
+
+.hint {
+    font-weight: 400;
+    color: var(--color-muted);
+    font-size: var(--fs-hint);
+}
+
+/* Filas de campos en paralelo */
+.row-2 {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.row-2 .field-group {
+    flex: 1;
+}
+
+.row-3 {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.row-3 mat-form-field {
+    flex: 1;
+}
+
+/* Caja de interruptor (fijo/variable) */
+.toggle-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+}
+
+.toggle-title {
+    font-weight: 600;
+    font-size: var(--fs-body);
+}
+
+.toggle-sub {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+/* Nota informativa dentro del diálogo */
+.info-note {
+    background: var(--color-income-soft);
+    color: var(--color-income);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: var(--fs-hint);
+    margin: 0.25rem 0 0;
+}
+
+/* ---- Header con ícono + títulos (pay / receive) ---- */
+.dialog-title-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dialog-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog-icon.expense {
+    background: var(--color-expense-soft);
+    color: var(--color-expense);
+}
+
+.dialog-icon.income {
+    background: var(--color-income-soft);
+    color: var(--color-income);
+}
+
+.dialog-titles {
+    display: flex;
+    flex-direction: column;
+}
+
+.dialog-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.dialog-subtitle {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+}
+
+/* ---- Caja resumen (monto a pagar / recibir) ---- */
+.summary-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: var(--radius);
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.summary-box.expense {
+    background: var(--color-expense-soft);
+}
+
+.summary-box.income {
+    background: var(--color-income-soft);
+}
+
+.summary-name {
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.summary-box.expense .summary-sub {
+    color: var(--color-expense);
+    font-size: 0.82rem;
+}
+
+.summary-box.income .summary-sub {
+    color: var(--color-income);
+    font-size: 0.82rem;
+}
+
+.summary-right {
+    text-align: right;
+}
+
+.summary-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-muted);
+}
+
+.summary-value {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
