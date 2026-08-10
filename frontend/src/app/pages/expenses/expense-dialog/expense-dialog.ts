@@ -10,14 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Expense, ExpenseRequest } from '../../../models/expense.models';
 import { Category } from '../../../models/category.models';
 import { MONTHS, YEARS, PERIODICITIES } from '../../../shared/options';
+import { daysOrderValidator } from '../../../shared/validators';
 
-function daysOrderValidator(group: AbstractControl): ValidationErrors | null {
-  const cutoff = group.get('cutoffDay')?.value;
-  const due = group.get('dueDay')?.value;
-  const suspension = group.get('suspensionDay')?.value;
-  if (cutoff == null || due == null || suspension == null) return null;
-  return cutoff <= due && due <= suspension ? null : { daysOrder: true };
-}
 
 interface ExpenseDialogData {
   categories: Category[];
