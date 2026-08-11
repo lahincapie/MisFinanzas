@@ -67,6 +67,7 @@
           <div class="filters">
             <button class="filter-chip" [class.active]="expenseFilter() === 'todos'" (click)="expenseFilter.set('todos')">Todos</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'pendientes'" (click)="expenseFilter.set('pendientes')">Pendientes</button>
+            <button class="filter-chip" [class.active]="expenseFilter() === 'vencidos'" (click)="expenseFilter.set('vencidos')">Vencidos</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'pagados'" (click)="expenseFilter.set('pagados')">Pagados</button>
           </div>
         </div>

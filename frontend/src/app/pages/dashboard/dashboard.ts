@@ -44,14 +44,15 @@ export class Dashboard implements OnInit {
   incomesTotal = computed(() => this.data()?.incomes.length ?? 0);
   incomesReceivedCount = computed(() => this.data()?.incomes.filter(i => i.status === 'Recibido').length ?? 0);
 
-  expenseFilter = signal<'todos' | 'pendientes' | 'pagados'>('todos');
+  expenseFilter = signal<'todos' | 'pendientes' | 'pagados' | 'vencidos'>('todos');
   incomeFilter = signal<'todos' | 'pendientes' | 'recibidos'>('todos');
 
   filteredExpenses = computed(() => {
     const items = this.data()?.expenses ?? [];
     const f = this.expenseFilter();
-    if (f === 'pendientes') return items.filter(e => e.status === 'Pendiente');
+    if (f === 'pendientes') return items.filter(e => e.status === 'Pendiente' && !e.isOverdue);
     if (f === 'pagados') return items.filter(e => e.status === 'Pagado');
+    if (f === 'vencidos') return items.filter(e => e.isOverdue);
     return items;
   });
 
