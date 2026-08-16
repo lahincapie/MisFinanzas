@@ -1,7 +1,5 @@
 <div class="dashboard-container">
-  <h1>Dashboard</h1>
-
-  <div class="dashboard-header">
+    <div class="dashboard-header">
     <h1>Dashboard</h1>
     <div class="month-nav">
       <button matIconButton type="button" (click)="changeMonth(-1)"><mat-icon>chevron_left</mat-icon></button>
@@ -77,9 +75,17 @@
               <div class="row-icon" [style.background-color]="getCategoryColor(e.categoryName) + '22'">
                 <mat-icon [style.color]="getCategoryColor(e.categoryName)">{{ getCategoryIcon(e.categoryName) }}</mat-icon>
               </div>
-              <div class="row-main">
+              <div class="row-main" [class.clickable]="e.status === 'Pagado'"
+                   (click)="e.status === 'Pagado' && openExpenseDetail(e)">
                 <span class="row-name">{{ e.name }}</span>
-                <span class="row-sub">{{ e.categoryName }} · vence el {{ e.dueDay }}</span>
+                <span class="row-sub">
+                  {{ e.categoryName }} ·
+                  @if (e.status === 'Pagado' && e.paidOn) {
+                    pagado el {{ e.paidOn | date:'d MMM' }}
+                  } @else {
+                    vence el {{ e.dueDay }}
+                  }
+                </span>
               </div>
               <div class="row-status">
                 @if (e.isOverdue) {
@@ -129,9 +135,16 @@
               <div class="row-icon" style="background-color: #e8f5e9;">
                 <mat-icon style="color: #2e7d32;">savings</mat-icon>
               </div>
-              <div class="row-main">
+              <div class="row-main" [class.clickable]="i.status === 'Recibido'"
+                   (click)="i.status === 'Recibido' && openIncomeDetail(i)">
                 <span class="row-name">{{ i.name }}</span>
-                <span class="row-sub">esperado el {{ i.expectedReceiptDay }}</span>
+                <span class="row-sub">
+                  @if (i.status === 'Recibido' && i.receivedOn) {
+                    recibido el {{ i.receivedOn | date:'d MMM' }}
+                  } @else {
+                    esperado el {{ i.expectedReceiptDay }}
+                  }
+                </span>
               </div>
               <div class="row-status">
                 @if (i.isLate) {

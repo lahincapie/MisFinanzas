@@ -20,5 +20,10 @@
 
         /// <summary>CALCULADO: true si está pendiente y ya pasó el día esperado.</summary>
         public bool IsLate { get; set; }
+        /// <summary>Fecha en que se recibió (null si sigue pendiente).</summary>
+        public DateTime? ReceivedOn { get; set; }
+
+        /// <summary>Observaciones de la recepción (opcional).</summary>
+        public string? ReceiptNotes { get; set; }
     }
 }

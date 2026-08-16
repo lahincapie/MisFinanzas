@@ -61,7 +61,10 @@ namespace MisFinanzas.Application.Dashboard.Services
                     ProjectedAmount = projected,
                     DueDay = expense.DueDay,
                     IsOverdue = ProjectionCalculator.IsOverdue(
-                        m.Status, month, expense.DueDay, today)
+                        m.Status, month, expense.DueDay, today),
+                    PaidOn = payment?.PaymentDate,
+                    PaymentMethodName = payment?.PaymentMethod?.Name,
+                    PaymentNotes = payment?.Notes
                 };
 
                 dashboard.Expenses.Add(item);
@@ -92,7 +95,9 @@ namespace MisFinanzas.Application.Dashboard.Services
                     ProjectedAmount = projected,
                     ExpectedReceiptDay = income.ExpectedReceiptDay,
                     IsLate = ProjectionCalculator.IsLate(
-                        m.Status, month, income.ExpectedReceiptDay, today)
+                        m.Status, month, income.ExpectedReceiptDay, today),
+                    ReceivedOn = receipt?.ReceiptDate,
+                    ReceiptNotes = receipt?.Notes
                 };
 
                 dashboard.Incomes.Add(item);

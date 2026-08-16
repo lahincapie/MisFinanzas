@@ -1,0 +1,53 @@
+<div class="detail-dialog">
+  <div class="dialog-header">
+    <div class="dialog-title-block">
+      <div class="dialog-icon" [class.expense]="data.kind === 'expense'" [class.income]="data.kind === 'income'">
+        <mat-icon>{{ data.kind === 'expense' ? 'payments' : 'savings' }}</mat-icon>
+      </div>
+      <div class="dialog-titles">
+        <span class="dialog-title">{{ data.title }}</span>
+        <span class="dialog-subtitle">
+          {{ data.kind === 'expense' ? 'Detalle del pago' : 'Detalle de la recepción' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="summary-box" [class.expense]="data.kind === 'expense'" [class.income]="data.kind === 'income'">
+      <div>
+        <div class="summary-name">{{ data.title }}</div>
+        @if (data.subtitle) {
+          <div class="summary-sub">{{ data.subtitle }}</div>
+        }
+      </div>
+      <div class="summary-right">
+        <div class="summary-label">{{ data.kind === 'expense' ? 'Pagado' : 'Recibido' }}</div>
+        <div class="summary-value">{{ data.amount | currency:'COP' }}</div>
+      </div>
+    </div>
+
+    <div class="detail-list">
+      <div class="detail-row">
+        <span class="detail-label">Fecha</span>
+        <span class="detail-value">{{ data.date | date:'d MMM y' }}</span>
+      </div>
+      @if (data.paymentMethodName) {
+        <div class="detail-row">
+          <span class="detail-label">Medio de pago</span>
+          <span class="detail-value">{{ data.paymentMethodName }}</span>
+        </div>
+      }
+      @if (data.notes) {
+        <div class="detail-row">
+          <span class="detail-label">Notas</span>
+          <span class="detail-value">{{ data.notes }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <mat-dialog-actions align="end">
+    <button matButton mat-dialog-close type="button">Cerrar</button>
+  </mat-dialog-actions>
+</div>

@@ -21,5 +21,13 @@
 
         /// <summary>CALCULADO: true si está pendiente y ya pasó el día de pago oportuno.</summary>
         public bool IsOverdue { get; set; }
+        /// <summary>Fecha en que se pagó (null si sigue pendiente).</summary>
+        public DateTime? PaidOn { get; set; }
+
+        /// <summary>Medio de pago usado (null si sigue pendiente).</summary>
+        public string? PaymentMethodName { get; set; }
+
+        /// <summary>Observaciones del pago (opcional).</summary>
+        public string? PaymentNotes { get; set; }
     }
 }

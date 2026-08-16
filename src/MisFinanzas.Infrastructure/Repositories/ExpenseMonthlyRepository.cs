@@ -64,6 +64,7 @@ namespace MisFinanzas.Infrastructure.Repositories
                 .Include(m => m.Expense)                // trae el gasto (nombre, DueDay, fijo/variable...)
                     .ThenInclude(e => e!.Category)      // y de ese gasto, su categoría
                 .Include(m => m.Payments.Where(p => p.IsActive))   // y su pago ACTIVO (si lo tiene)
+                .ThenInclude(p => p.PaymentMethod)
                 .OrderBy(m => m.Expense!.Name)
                 .ToListAsync();
         }
