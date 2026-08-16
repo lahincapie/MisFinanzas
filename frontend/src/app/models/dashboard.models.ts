@@ -7,6 +7,9 @@ export interface DashboardExpenseItem {
   projectedAmount: number;
   dueDay: number;
   isOverdue: boolean;
+  paidOn: string | null;
+  paymentMethodName: string | null;
+  paymentNotes: string | null;
 }
 
 export interface DashboardIncomeItem {
@@ -17,6 +20,8 @@ export interface DashboardIncomeItem {
   projectedAmount: number;
   expectedReceiptDay: number;
   isLate: boolean;
+  receivedOn: string | null;
+  receiptNotes: string | null;
 }
 
 export interface DashboardData {

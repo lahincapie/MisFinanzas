@@ -286,3 +286,10 @@ h2 {
     text-align: center;
     padding: 1.5rem 0;
 }
+.row-main.clickable {
+    cursor: pointer;
+}
+
+.row-main.clickable:hover .row-name {
+    text-decoration: underline;
+}

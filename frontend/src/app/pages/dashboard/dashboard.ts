@@ -18,6 +18,7 @@ import { PayDialog } from './pay-dialog/pay-dialog';
 import { ReceiveDialog } from './receive-dialog/receive-dialog';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PaymentDetailDialog } from './payment-detail-dialog/payment-detail-dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -177,6 +178,34 @@ export class Dashboard implements OnInit {
         next: () => this.loadDashboard(),
         error: (err) => console.error('Error al revertir:', err)
       });
+    });
+  }
+
+  openExpenseDetail(e: DashboardExpenseItem): void {
+    this.dialog.open(PaymentDetailDialog, {
+      data: {
+        kind: 'expense',
+        title: e.name,
+        subtitle: e.categoryName,
+        amount: e.paidAmount,
+        date: e.paidOn,
+        paymentMethodName: e.paymentMethodName,
+        notes: e.paymentNotes
+      }
+    });
+  }
+
+  openIncomeDetail(i: DashboardIncomeItem): void {
+    this.dialog.open(PaymentDetailDialog, {
+      data: {
+        kind: 'income',
+        title: i.name,
+        subtitle: null,
+        amount: i.receivedAmount,
+        date: i.receivedOn,
+        paymentMethodName: null,
+        notes: i.receiptNotes
+      }
     });
   }
 
