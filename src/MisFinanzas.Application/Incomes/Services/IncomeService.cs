@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MisFinanzas.Application.Incomes.Dtos;
 using MisFinanzas.Application.Incomes.Interfaces;
+using MisFinanzas.Domain.Expenses;
 using MisFinanzas.Domain.Incomes;
 
 namespace MisFinanzas.Application.Incomes.Services
@@ -43,6 +44,7 @@ namespace MisFinanzas.Application.Incomes.Services
                 ExpectedReceiptDay = dto.ExpectedReceiptDay,
                 StartMonth = dto.StartMonth,
                 EndMonth = dto.EndMonth,
+                AnchorMonth = dto.AnchorMonth,
                 UserId = userId,              // ← el dueño
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow
@@ -68,7 +70,8 @@ namespace MisFinanzas.Application.Incomes.Services
                 ExpectedAmount = i.ExpectedAmount,
                 ExpectedReceiptDay = i.ExpectedReceiptDay,
                 StartMonth = i.StartMonth,
-                EndMonth = i.EndMonth
+                EndMonth = i.EndMonth,
+                AnchorMonth = i.AnchorMonth,
             }).ToList();
         }
 
@@ -94,6 +97,7 @@ namespace MisFinanzas.Application.Incomes.Services
             income.ExpectedReceiptDay = dto.ExpectedReceiptDay;
             income.StartMonth = dto.StartMonth;
             income.EndMonth = dto.EndMonth;
+            income.AnchorMonth = dto.AnchorMonth;
             income.UpdatedAt = DateTime.UtcNow;
 
             // 5. Guardar (EF rastrea el cambio)

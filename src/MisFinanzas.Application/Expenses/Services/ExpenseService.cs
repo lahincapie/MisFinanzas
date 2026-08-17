@@ -56,6 +56,7 @@ namespace MisFinanzas.Application.Expenses.Services
                 SuspensionDay = dto.SuspensionDay,
                 StartMonth = dto.StartMonth,
                 EndMonth = dto.EndMonth,
+                AnchorMonth = dto.AnchorMonth,
                 Reference = dto.Reference,
                 Contract = dto.Contract,
                 UserId = userId,
@@ -88,6 +89,7 @@ namespace MisFinanzas.Application.Expenses.Services
                 SuspensionDay = e.SuspensionDay,
                 StartMonth = e.StartMonth,
                 EndMonth = e.EndMonth,
+                AnchorMonth = e.AnchorMonth,
                 Reference = e.Reference,
                 Contract = e.Contract
             }).ToList();
@@ -124,6 +126,7 @@ namespace MisFinanzas.Application.Expenses.Services
             expense.SuspensionDay = dto.SuspensionDay;
             expense.StartMonth = dto.StartMonth;
             expense.EndMonth = dto.EndMonth;
+            expense.AnchorMonth = dto.AnchorMonth;
             expense.Reference = dto.Reference;
             expense.Contract = dto.Contract;
             expense.UpdatedAt = DateTime.UtcNow;

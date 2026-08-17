@@ -26,6 +26,13 @@ namespace MisFinanzas.Domain.Expenses
         public Periodicity Periodicity { get; set; }
 
         /// <summary>
+        /// Mes base para calcular la periodicidad, formato "YYYY-MM".
+        /// Desde este mes se cuentan los saltos (bimestral, trimestral...).
+        /// Obligatorio para gastos no mensuales; los mensuales lo ignoran.
+        /// </summary>
+        public string? AnchorMonth { get; set; }
+
+        /// <summary>
         /// Si es true, el monto es variable: se digita al pagar y no usa valor esperado.
         /// Si es false (fijo), usa ExpectedAmount.
         /// </summary>

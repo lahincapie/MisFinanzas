@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MisFinanzas.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MisFinanzas.Infrastructure.Persistence;
 namespace MisFinanzas.Infrastructure.Migrations
 {
     [DbContext(typeof(MisFinanzasDbContext))]
-    partial class MisFinanzasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260816224911_AddAnchorMonthToExpense")]
+    partial class AddAnchorMonthToExpense
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -369,9 +372,6 @@ namespace MisFinanzas.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("AnchorMonth")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");

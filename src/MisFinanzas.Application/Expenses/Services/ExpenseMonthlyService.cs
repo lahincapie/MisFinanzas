@@ -37,7 +37,7 @@ namespace MisFinanzas.Application.Expenses.Services
             foreach (var expense in expenses)
             {
                 bool applies = ScheduleCalculator.AppliesToMonth(
-                    expense.Periodicity, expense.StartMonth, expense.EndMonth, month);
+                    expense.Periodicity, expense.AnchorMonth, expense.StartMonth, expense.EndMonth, month);
 
                 if (!applies) continue;
                 if (existingIds.Contains(expense.Id)) continue;

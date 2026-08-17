@@ -7,6 +7,7 @@ export interface Income {
   expectedReceiptDay: number;
   startMonth: string | null;
   endMonth: string | null;
+  anchorMonth: string | null;
 }
 
 export interface IncomeRequest {
@@ -17,6 +18,7 @@ export interface IncomeRequest {
   expectedReceiptDay: number;
   startMonth?: string | null;
   endMonth?: string | null;
+  anchorMonth?: string | null;
 }
 
 export interface IncomeReceiptRequest {

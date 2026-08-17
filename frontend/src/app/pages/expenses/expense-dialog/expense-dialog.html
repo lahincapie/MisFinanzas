@@ -40,6 +40,35 @@
       </mat-form-field>
     </div>
 
+    @if (!isMonthlySig()) {
+      <div class="field-group">
+        <label class="field-label">Mes base del ciclo <span class="hint">· obligatorio · desde aquí se cuenta la periodicidad</span></label>
+        <div class="row-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Mes</mat-label>
+            <mat-select formControlName="anchorMonthNum">
+              <mat-option value="">—</mat-option>
+              @for (m of months; track m.value) {
+                <mat-option [value]="m.value">{{ m.label }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Año</mat-label>
+            <mat-select formControlName="anchorYear">
+              <mat-option value="">—</mat-option>
+              @for (y of years; track y) {
+                <mat-option [value]="y">{{ y }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        @if (form.hasError('anchorRequired')) {
+          <p class="days-error">El mes base es obligatorio para gastos no mensuales.</p>
+        }
+      </div>
+    }
+
     <div class="toggle-box">
       <div>
         <div class="toggle-title">¿Es un gasto variable?</div>

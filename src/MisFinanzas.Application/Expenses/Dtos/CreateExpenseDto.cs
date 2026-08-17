@@ -17,5 +17,6 @@ namespace MisFinanzas.Application.Expenses.Dtos
         public string? EndMonth { get; set; }
         public string? Reference { get; set; }
         public string? Contract { get; set; }
+        public string? AnchorMonth { get; set; }
     }
 }

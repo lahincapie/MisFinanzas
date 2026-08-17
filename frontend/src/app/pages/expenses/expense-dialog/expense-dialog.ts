@@ -10,7 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Expense, ExpenseRequest } from '../../../models/expense.models';
 import { Category } from '../../../models/category.models';
 import { MONTHS, YEARS, PERIODICITIES } from '../../../shared/options';
-import { daysOrderValidator } from '../../../shared/validators';
+import { daysOrderValidator, anchorRequiredValidator } from '../../../shared/validators';
 
 
 interface ExpenseDialogData {
@@ -39,6 +39,7 @@ export class ExpenseDialog {
   data = inject<ExpenseDialogData>(MAT_DIALOG_DATA);
 
   isVariableSig = signal(false);
+  isMonthlySig = signal(true);
 
   readonly periodicities = PERIODICITIES;
   readonly months = MONTHS;
@@ -57,9 +58,11 @@ export class ExpenseDialog {
     startYear: [''],
     endMonthNum: [''],
     endYear: [''],
+    anchorMonthNum: [''],
+    anchorYear: [''],
     reference: [''],
     contract: ['']
-  }, { validators: daysOrderValidator });
+  }, { validators: [daysOrderValidator, anchorRequiredValidator] });
 
   isEdit = this.data.expense !== null;
 
@@ -74,6 +77,10 @@ export class ExpenseDialog {
         amount.setValidators([Validators.required, Validators.min(0)]);
       }
       amount.updateValueAndValidity();
+    });
+
+    this.form.controls.periodicity.valueChanges.subscribe(p => {
+      this.isMonthlySig.set(Number(p) === 1);
     });
 
     if (this.data.expense) {
@@ -91,9 +98,12 @@ export class ExpenseDialog {
         startYear: e.startMonth ? e.startMonth.split('-')[0] : '',
         endMonthNum: e.endMonth ? e.endMonth.split('-')[1] : '',
         endYear: e.endMonth ? e.endMonth.split('-')[0] : '',
+        anchorMonthNum: e.anchorMonth ? e.anchorMonth.split('-')[1] : '',
+        anchorYear: e.anchorMonth ? e.anchorMonth.split('-')[0] : '',
         reference: e.reference ?? '',
         contract: e.contract ?? ''
       });
+      this.isMonthlySig.set(Number(e.periodicity) === 1);
     }
   }
 
@@ -102,6 +112,8 @@ export class ExpenseDialog {
     const v = this.form.getRawValue();
     const startMonth = v.startYear && v.startMonthNum ? `${v.startYear}-${v.startMonthNum}` : null;
     const endMonth = v.endYear && v.endMonthNum ? `${v.endYear}-${v.endMonthNum}` : null;
+    const anchorMonth = Number(v.periodicity) !== 1 && v.anchorYear && v.anchorMonthNum
+      ? `${v.anchorYear}-${v.anchorMonthNum}` : null;
     const request: ExpenseRequest = {
       name: v.name!,
       categoryId: v.categoryId!,
@@ -113,6 +125,7 @@ export class ExpenseDialog {
       suspensionDay: v.suspensionDay!,
       startMonth,
       endMonth,
+      anchorMonth,
       reference: v.reference || null,
       contract: v.contract || null
     };
