@@ -23,8 +23,9 @@ namespace MisFinanzas.Application.Common
         };
 
         /// <summary>Indica si un gasto aplica al mes objetivo.</summary>
+        /// <summary>Indica si un gasto aplica al mes objetivo.</summary>
         public static bool AppliesToMonth(
-            Periodicity periodicity, string? startMonth, string? endMonth, string targetMonth)
+            Periodicity periodicity, string? anchorMonth, string? startMonth, string? endMonth, string targetMonth)
         {
             var target = ToIndex(targetMonth);
 
@@ -34,11 +35,17 @@ namespace MisFinanzas.Application.Common
             if (!string.IsNullOrWhiteSpace(endMonth) && target > ToIndex(endMonth))
                 return false;
 
-            // 2. Periodicidad: la distancia en meses desde el ancla debe ser múltiplo del salto.
-            var anchor = !string.IsNullOrWhiteSpace(startMonth) ? ToIndex(startMonth) : target;
+            // 2. Periodicidad
             var step = ToMonthStep(periodicity);
-            var distance = target - anchor;
 
+            // Mensual (salto 1): aplica todos los meses dentro de la vigencia.
+            if (step == 1) return true;
+
+            // No mensual SIN ancla: no se puede calcular el ciclo → no aplica.
+            if (string.IsNullOrWhiteSpace(anchorMonth)) return false;
+
+            // La distancia desde el ancla debe ser múltiplo del salto.
+            var distance = target - ToIndex(anchorMonth);
             return distance >= 0 && distance % step == 0;
         }
 

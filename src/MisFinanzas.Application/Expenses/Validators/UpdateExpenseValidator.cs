@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MisFinanzas.Application.Expenses.Dtos;
+using MisFinanzas.Domain.Common;
 
 namespace MisFinanzas.Application.Expenses.Validators
 {
@@ -48,6 +49,19 @@ namespace MisFinanzas.Application.Expenses.Validators
                 .Matches(@"^\d{4}-(0[1-9]|1[0-2])$")
                 .When(x => !string.IsNullOrWhiteSpace(x.EndMonth))
                 .WithMessage("El mes de fin debe tener formato YYYY-MM.");
+
+            // Mes base del ciclo: si viene, formato YYYY-MM
+            RuleFor(x => x.AnchorMonth)
+                .Matches(@"^\d{4}-(0[1-9]|1[0-2])$")
+                .When(x => !string.IsNullOrWhiteSpace(x.AnchorMonth))
+                .WithMessage("El mes base debe tener formato YYYY-MM.");
+
+            // Obligatorio para gastos no mensuales (es el ancla del ciclo)
+            RuleFor(x => x.AnchorMonth)
+                .NotEmpty()
+                .When(x => x.Periodicity != Periodicity.Monthly)
+                .WithMessage("El mes base es obligatorio para gastos que no son mensuales.");
+
         }
     }
 }

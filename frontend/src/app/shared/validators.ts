@@ -8,3 +8,12 @@ export function daysOrderValidator(group: AbstractControl): ValidationErrors | n
   if (cutoff == null || due == null || suspension == null) return null;
   return cutoff <= due && due <= suspension ? null : { daysOrder: true };
 }
+
+export function anchorRequiredValidator(group: AbstractControl): ValidationErrors | null {
+  const periodicity = Number(group.get('periodicity')?.value);
+  // Mensual (1) no necesita ancla
+  if (periodicity === 1) return null;
+  const monthNum = group.get('anchorMonthNum')?.value;
+  const year = group.get('anchorYear')?.value;
+  return monthNum && year ? null : { anchorRequired: true };
+}

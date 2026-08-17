@@ -11,6 +11,7 @@ export interface Expense {
   suspensionDay: number;
   startMonth: string | null;
   endMonth: string | null;
+  anchorMonth: string | null;
   reference: string | null;
   contract: string | null;
 }
@@ -26,6 +27,7 @@ export interface ExpenseRequest {
   suspensionDay: number;
   startMonth?: string | null;
   endMonth?: string | null;
+  anchorMonth?: string | null;
   reference?: string | null;
   contract?: string | null;
 }

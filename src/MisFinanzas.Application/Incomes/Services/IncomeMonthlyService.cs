@@ -33,7 +33,7 @@ namespace MisFinanzas.Application.Incomes.Services
             foreach (var income in incomes)
             {
                 bool applies = ScheduleCalculator.AppliesToMonth(
-                    income.Periodicity, income.StartMonth, income.EndMonth, month);
+            income.Periodicity, income.AnchorMonth, income.StartMonth, income.EndMonth, month);
 
                 if (!applies) continue;
                 if (existingIds.Contains(income.Id)) continue;

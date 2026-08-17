@@ -13,5 +13,6 @@ namespace MisFinanzas.Application.Incomes.Dtos
         public int ExpectedReceiptDay { get; set; }
         public string? StartMonth { get; set; }
         public string? EndMonth { get; set; }
+        public string? AnchorMonth { get; set; }
     }
 }
