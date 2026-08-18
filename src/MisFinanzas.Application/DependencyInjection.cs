@@ -10,6 +10,8 @@ using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Application.Expenses.Services;
 using MisFinanzas.Application.Incomes.Interfaces;
 using MisFinanzas.Application.Incomes.Services;
+using MisFinanzas.Application.Reports.Interfaces;
+using MisFinanzas.Application.Reports.Services;
 using System.Reflection;
 
 namespace MisFinanzas.Application
@@ -35,6 +37,7 @@ namespace MisFinanzas.Application
             services.AddScoped<IIncomeReceiptService, IncomeReceiptService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IReportService, ReportService>();
 
             return services;
         }
