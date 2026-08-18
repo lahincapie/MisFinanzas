@@ -6,6 +6,7 @@ using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Application.Expenses.Interfaces;
 using MisFinanzas.Application.Incomes.Interfaces;
 using MisFinanzas.Application.PaymentMethods.Interfaces;
+using MisFinanzas.Application.Reports.Interfaces;
 using MisFinanzas.Domain.Users;
 using MisFinanzas.Infrastructure.Auth;
 using MisFinanzas.Infrastructure.Persistence;
@@ -34,6 +35,7 @@ namespace MisFinanzas.Infrastructure
             services.AddScoped<IIncomeRepository, IncomeRepository>();
             services.AddScoped<IIncomeMonthlyRepository, IncomeMonthlyRepository>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IReportRepository, ReportRepository>();
 
             services.AddIdentityCore<ApplicationUser>(options =>
             {

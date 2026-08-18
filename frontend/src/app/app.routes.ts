@@ -8,6 +8,7 @@ import { Categories } from './pages/categories/categories';
 import { Expenses } from './pages/expenses/expenses';
 import { Incomes } from './pages/incomes/incomes';
 import { authGuard } from './guards/auth.guard';
+import { Reports } from './pages/reports/reports';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -16,7 +17,7 @@ export const routes: Routes = [
     component: AuthLayout,
     children: [
       { path: 'login', component: Login },
-      { path: 'register', component: Register }
+      { path: 'register', component: Register },
     ]
   },
   {
@@ -27,7 +28,8 @@ export const routes: Routes = [
       { path: 'dashboard', component: Dashboard },
       { path: 'categories', component: Categories },
       { path: 'expenses', component: Expenses },
-      { path: 'incomes', component: Incomes }
+      { path: 'incomes', component: Incomes },
+      { path: 'reports', component: Reports }
     ]
   }
 ];

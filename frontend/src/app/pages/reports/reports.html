@@ -1,0 +1,108 @@
+<div class="reports-container">
+  <div class="page-header">
+    <div>
+      <h1>Reportes</h1>
+      <p class="page-sub">Cuánto has gastado (real) en un rango de meses.</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <div class="range-field">
+      <span class="range-label">Desde</span>
+      <mat-form-field appearance="outline">
+        <mat-label>Mes</mat-label>
+        <mat-select [(ngModel)]="fromMonth" [ngModelOptions]="{ standalone: true }">
+          @for (m of months; track m.value) {
+            <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <mat-select [(ngModel)]="fromYear" [ngModelOptions]="{ standalone: true }">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="range-field">
+      <span class="range-label">Hasta</span>
+      <mat-form-field appearance="outline">
+        <mat-label>Mes</mat-label>
+        <mat-select [(ngModel)]="toMonth" [ngModelOptions]="{ standalone: true }">
+          @for (m of months; track m.value) {
+            <mat-option [value]="m.value">{{ m.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <mat-select [(ngModel)]="toYear" [ngModelOptions]="{ standalone: true }">
+          @for (y of years; track y) {
+            <mat-option [value]="y">{{ y }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button matButton="filled" type="button" (click)="load()">Aplicar</button>
+  </div>
+
+  <div class="view-toggle">
+    <button type="button" class="toggle-btn" [class.active]="view() === 'category'" (click)="setView('category')">Por categoría</button>
+    <button type="button" class="toggle-btn" [class.active]="view() === 'expense'" (click)="setView('expense')">Por gasto</button>
+  </div>
+
+  @if (loading()) {
+    <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>
+  } @else {
+    <div class="total-box">
+      <span class="total-label">Total del periodo</span>
+      <span class="total-value">{{ total() | currency:'COP' }}</span>
+    </div>
+
+    @if (rows().length > 0) {
+      <div class="chart-card">
+        <h2 class="card-title">{{ view() === 'category' ? 'Gasto por categoría' : 'Gasto por concepto' }}</h2>
+        @for (row of rows(); track row.label) {
+          <div class="bar-row">
+            <span class="bar-label">
+              {{ row.label }}
+              @if (row.sub) { <span class="bar-sub">{{ row.sub }}</span> }
+            </span>
+            <div class="bar-track">
+              <div class="bar-fill" [style.width.%]="barWidth(row.total)"></div>
+            </div>
+            <span class="bar-value">{{ row.total | currency:'COP' }}</span>
+          </div>
+        }
+      </div>
+
+      <table class="reports-table">
+        <thead>
+          <tr>
+            <th>{{ view() === 'category' ? 'Categoría' : 'Gasto' }}</th>
+            <th class="num">Total</th>
+            <th class="num">% del total</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows(); track row.label) {
+            <tr>
+              <td>
+                {{ row.label }}
+                @if (row.sub) { <span class="row-sub-cat">· {{ row.sub }}</span> }
+              </td>
+              <td class="num">{{ row.total | currency:'COP' }}</td>
+              <td class="num">{{ percent(row.total) | number:'1.0-1' }}%</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <p class="empty-msg">No hay gastos registrados en este rango.</p>
+    }
+  }
+</div>

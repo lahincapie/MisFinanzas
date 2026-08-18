@@ -1,0 +1,185 @@
+.reports-container {
+    padding: 2rem;
+}
+
+.filters-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.range-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.range-label {
+    font-weight: 600;
+    font-size: var(--fs-label);
+    color: var(--color-muted);
+}
+
+.range-field mat-form-field {
+    width: 110px;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 0;
+}
+
+.total-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: var(--color-primary-soft);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.total-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.total-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.chart-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-title {
+    font-size: var(--fs-subtitle);
+    margin: 0 0 1rem;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.bar-label {
+    width: 140px;
+    flex-shrink: 0;
+    font-size: var(--fs-body);
+    font-weight: 600;
+}
+
+.bar-track {
+    flex: 1;
+    background: var(--color-bg);
+    border-radius: 6px;
+    height: 22px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+.bar-value {
+    width: 130px;
+    flex-shrink: 0;
+    text-align: right;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.reports-table th,
+.reports-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border-soft);
+}
+
+.reports-table thead th {
+    background: var(--color-bg);
+    color: var(--color-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
+
+.reports-table .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.reports-table tbody tr:last-child td {
+    border-bottom: none;
+}
+.view-toggle {
+    display: inline-flex;
+    gap: 0.25rem;
+    background: var(--color-bg);
+    border-radius: var(--radius);
+    padding: 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.toggle-btn {
+    border: none;
+    background: transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-base);
+    font-size: var(--fs-body);
+    font-weight: 600;
+    color: var(--color-muted);
+}
+
+.toggle-btn.active {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-card);
+}
+
+.bar-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bar-sub {
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    font-weight: 400;
+}
+
+.row-sub-cat {
+    color: var(--color-muted);
+    font-size: 0.8rem;
+}
