@@ -48,20 +48,28 @@ namespace MisFinanzas.Application.Dashboard.Services
                         .GetAveragePaymentAsync(expense.Id, 3);
                 }
 
-                var projected = ProjectionCalculator.ProjectExpense(
+                var projected = m.Status == ExpenseStatus.Skipped
+                    ? 0m
+                    : ProjectionCalculator.ProjectExpense(
                     m.Status, expense.IsVariable, expense.ExpectedAmount, average);
-
+                
                 var item = new DashboardExpenseItemDto
                 {
                     ExpenseId = m.ExpenseId,       // ← la FK del registro mensual, siempre confiable
                     Name = expense.Name,
                     CategoryName = expense.Category?.Name ?? "(sin categoría)",
-                    Status = m.Status == ExpenseStatus.Paid ? "Pagado" : "Pendiente",
+                    Status = m.Status switch
+                    {
+                        ExpenseStatus.Paid => "Pagado",
+                        ExpenseStatus.Skipped => "Omitido",
+                        _ => "Pendiente"
+                    },
                     PaidAmount = payment?.Amount,
                     ProjectedAmount = projected,
                     DueDay = expense.DueDay,
-                    IsOverdue = ProjectionCalculator.IsOverdue(
-                        m.Status, month, expense.DueDay, today),
+                    IsOverdue = m.Status != ExpenseStatus.Skipped
+                        && ProjectionCalculator.IsOverdue(
+                            m.Status, month, expense.DueDay, today),
                     PaidOn = payment?.PaymentDate,
                     PaymentMethodName = payment?.PaymentMethod?.Name,
                     PaymentNotes = payment?.Notes

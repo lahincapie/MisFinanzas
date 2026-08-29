@@ -8,5 +8,7 @@
         /// y aún no lo tienen. Devuelve cuántos registros creó.
         /// </summary>
         Task<int> GenerateForMonthAsync(string month, string userId);
+        Task SkipMonthAsync(int expenseId, string month, string userId);
+        Task UnskipMonthAsync(int expenseId, string month, string userId);
     }
 }

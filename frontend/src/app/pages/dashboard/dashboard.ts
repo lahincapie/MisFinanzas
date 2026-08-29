@@ -45,7 +45,7 @@ export class Dashboard implements OnInit {
   incomesTotal = computed(() => this.data()?.incomes.length ?? 0);
   incomesReceivedCount = computed(() => this.data()?.incomes.filter(i => i.status === 'Recibido').length ?? 0);
 
-  expenseFilter = signal<'todos' | 'pendientes' | 'pagados' | 'vencidos'>('todos');
+  expenseFilter = signal<'todos' | 'pendientes' | 'pagados' | 'vencidos' | 'omitidos'>('todos');
   incomeFilter = signal<'todos' | 'pendientes' | 'recibidos'>('todos');
 
   filteredExpenses = computed(() => {
@@ -53,6 +53,7 @@ export class Dashboard implements OnInit {
     const f = this.expenseFilter();
     if (f === 'pendientes') return items.filter(e => e.status === 'Pendiente' && !e.isOverdue);
     if (f === 'pagados') return items.filter(e => e.status === 'Pagado');
+    if (f === 'omitidos') return items.filter(e => e.status === 'Omitido');
     if (f === 'vencidos') return items.filter(e => e.isOverdue);
     return items;
   });
@@ -146,6 +147,31 @@ export class Dashboard implements OnInit {
         next: () => this.loadDashboard(),
         error: (err) => console.error('Error al revertir:', err)
       });
+    });
+  }
+
+    skipExpense(exp: DashboardExpenseItem): void {
+    const ref = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Omitir este mes',
+        message: `¿Omitir <strong>${exp.name}</strong> este mes? No contará como pendiente ni en lo proyectado. Podrás reactivarlo, y el próximo mes que le corresponda aparecerá normal.`,
+        confirmLabel: 'Omitir',
+        icon: 'block'
+      }
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.expenseService.skip(exp.expenseId, this.currentMonth()).subscribe({
+        next: () => this.loadDashboard(),
+        error: (err) => console.error('Error al omitir:', err)
+      });
+    });
+  }
+
+  unskipExpense(exp: DashboardExpenseItem): void {
+    this.expenseService.unskip(exp.expenseId, this.currentMonth()).subscribe({
+      next: () => this.loadDashboard(),
+      error: (err) => console.error('Error al reactivar:', err)
     });
   }
 

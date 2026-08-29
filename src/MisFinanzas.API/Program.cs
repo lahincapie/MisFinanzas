@@ -61,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseDefaultFiles();   // si piden "/", busca index.html por defecto
+app.UseStaticFiles();    // entrega los archivos de wwwroot (js, css, html)
 
 // 3. Primero autenticación (¿quién eres?), luego autorización (¿puedes?)
 app.UseCors("AllowFrontend");
@@ -68,5 +70,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 app.Run();

@@ -84,5 +84,21 @@ namespace MisFinanzas.API.Controllers
             await _paymentService.RevertPaymentAsync(id, month, CurrentUserId);
             return NoContent();
         }
+
+        /// <summary>Omite un gasto en un mes (lo marca como Omitido).</summary>
+        [HttpPost("{id}/months/{month}/skip")]
+        public async Task<IActionResult> Skip(int id, string month)
+        {
+            await _monthlyService.SkipMonthAsync(id, month, CurrentUserId);
+            return NoContent();
+        }
+
+        /// <summary>Reactiva un gasto omitido en un mes (lo devuelve a Pendiente).</summary>
+        [HttpPost("{id}/months/{month}/unskip")]
+        public async Task<IActionResult> Unskip(int id, string month)
+        {
+            await _monthlyService.UnskipMonthAsync(id, month, CurrentUserId);
+            return NoContent();
+        }
     }
 }
