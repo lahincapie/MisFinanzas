@@ -226,9 +226,21 @@ h2 {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    min-width: 110px;
+    width: 130px;
+    flex-shrink: 0;
 }
-
+.row-status {
+    width: 90px;
+    flex-shrink: 0;
+}
+.row-action {
+    width: 160px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.25rem;
+}
 .amount {
     font-weight: 600;
     color: #1a1a2e;
@@ -259,6 +271,10 @@ h2 {
     border-color: #5b4fc4;
     color: #5b4fc4;
     font-weight: 600;
+}
+.chip.skipped {
+    background-color: var(--color-border-soft);
+    color: var(--color-muted);
 }
 .list-row {
     transition: background-color 0.15s;

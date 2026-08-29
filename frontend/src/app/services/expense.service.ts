@@ -35,4 +35,12 @@ export class ExpenseService {
   revert(id: number, month: string): Observable<unknown> {
     return this.http.post(`${this.baseUrl}/${id}/months/${month}/revert`, null);
   }
+
+    skip(id: number, month: string): Observable<unknown> {
+    return this.http.post(`${this.baseUrl}/${id}/months/${month}/skip`, null);
+  }
+
+  unskip(id: number, month: string): Observable<unknown> {
+    return this.http.post(`${this.baseUrl}/${id}/months/${month}/unskip`, null);
+  }
 }

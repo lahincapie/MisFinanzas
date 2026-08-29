@@ -66,6 +66,7 @@
             <button class="filter-chip" [class.active]="expenseFilter() === 'todos'" (click)="expenseFilter.set('todos')">Todos</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'pendientes'" (click)="expenseFilter.set('pendientes')">Pendientes</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'vencidos'" (click)="expenseFilter.set('vencidos')">Vencidos</button>
+            <button class="filter-chip" [class.active]="expenseFilter() === 'omitidos'" (click)="expenseFilter.set('omitidos')">Omitidos</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'pagados'" (click)="expenseFilter.set('pagados')">Pagados</button>
           </div>
         </div>
@@ -92,22 +93,30 @@
                   <span class="chip overdue">Vencido</span>
                 } @else if (e.status === 'Pagado') {
                   <span class="chip paid">Pagado</span>
+                } @else if (e.status === 'Omitido') {
+                  <span class="chip skipped">Omitido</span>
                 } @else {
                   <span class="chip pending">Pendiente</span>
                 }
               </div>
-              <div class="row-amount">
+                            <div class="row-amount">
                 @if (e.status === 'Pagado') {
                   <span class="amount">{{ e.paidAmount | currency:'COP' }}</span>
                   <span class="amount-label">real</span>
+                } @else if (e.status === 'Omitido') {
+                  <span class="amount muted">—</span>
+                  <span class="amount-label">omitido</span>
                 } @else {
                   <span class="amount">{{ e.projectedAmount | currency:'COP' }}</span>
                   <span class="amount-label">proyectado</span>
                 }
               </div>
-              <div class="row-action">
+                            <div class="row-action">
                 @if (e.status === 'Pendiente') {
                   <button matButton="filled" type="button" (click)="openPayDialog(e)">Pagar</button>
+                  <button matButton type="button" (click)="skipExpense(e)">Omitir</button>
+                } @else if (e.status === 'Omitido') {
+                  <button matButton type="button" (click)="unskipExpense(e)">Reactivar</button>
                 } @else {
                   <button matButton type="button" (click)="revertExpense(e)">Revertir</button>
                 }

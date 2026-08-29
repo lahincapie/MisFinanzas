@@ -7,6 +7,7 @@
     public enum ExpenseStatus
     {
         Pending = 1,   // Pendiente
-        Paid = 2       // Pagado
+        Paid = 2,      // Pagado
+        Skipped = 3    // Omitido (este mes no se paga; el próximo que le toque, reaparece)
     }
 }
