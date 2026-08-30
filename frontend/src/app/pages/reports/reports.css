@@ -183,3 +183,30 @@
     color: var(--color-muted);
     font-size: 0.8rem;
 }
+
+.bar-label {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    width: 165px;
+}
+
+.bar-label-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.cat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+.card-range {
+    font-size: var(--fs-label);
+    font-weight: 400;
+    color: var(--color-muted);
+    margin-left: 0.5rem;
+}
