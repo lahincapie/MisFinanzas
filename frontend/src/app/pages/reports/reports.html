@@ -50,17 +50,19 @@
     <button matButton="filled" type="button" (click)="load()">Aplicar</button>
   </div>
 
-  <div class="view-toggle">
-    <button type="button" class="toggle-btn" [class.active]="mode() === 'expenses'" (click)="setMode('expenses')">Gastos</button>
-    <button type="button" class="toggle-btn" [class.active]="mode() === 'incomes'" (click)="setMode('incomes')">Ingresos</button>
-  </div>
-
-  @if (mode() === 'expenses') {
+    <div class="toggles">
     <div class="view-toggle">
-      <button type="button" class="toggle-btn" [class.active]="view() === 'category'" (click)="setView('category')">Por categoría</button>
-      <button type="button" class="toggle-btn" [class.active]="view() === 'expense'" (click)="setView('expense')">Por gasto</button>
+      <button type="button" class="toggle-btn" [class.active]="mode() === 'expenses'" (click)="setMode('expenses')">Gastos</button>
+      <button type="button" class="toggle-btn" [class.active]="mode() === 'incomes'" (click)="setMode('incomes')">Ingresos</button>
     </div>
-  }
+
+    @if (mode() === 'expenses') {
+      <div class="view-toggle">
+        <button type="button" class="toggle-btn" [class.active]="view() === 'category'" (click)="setView('category')">Por categoría</button>
+        <button type="button" class="toggle-btn" [class.active]="view() === 'expense'" (click)="setView('expense')">Por gasto</button>
+      </div>
+    }
+  </div>
 
   @if (loading()) {
     <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>

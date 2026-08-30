@@ -210,3 +210,14 @@
     color: var(--color-muted);
     margin-left: 0.5rem;
 }
+.toggles {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.toggles .view-toggle {
+    margin-bottom: 0;
+}
