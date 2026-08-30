@@ -1,35 +1,26 @@
 import { Routes } from '@angular/router';
-import { AuthLayout } from './auth-layout/auth-layout';
-import { Login } from './pages/login/login';
-import { Register } from './pages/register/register';
-import { Layout } from './layout/layout';
-import { Dashboard } from './pages/dashboard/dashboard';
-import { Categories } from './pages/categories/categories';
-import { Expenses } from './pages/expenses/expenses';
-import { Incomes } from './pages/incomes/incomes';
 import { authGuard } from './guards/auth.guard';
-import { Reports } from './pages/reports/reports';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: '',
-    component: AuthLayout,
+    loadComponent: () => import('./auth-layout/auth-layout').then(m => m.AuthLayout),
     children: [
-      { path: 'login', component: Login },
-      { path: 'register', component: Register },
+      { path: 'login', loadComponent: () => import('./pages/login/login').then(m => m.Login) },
+      { path: 'register', loadComponent: () => import('./pages/register/register').then(m => m.Register) }
     ]
   },
   {
     path: '',
-    component: Layout,
+    loadComponent: () => import('./layout/layout').then(m => m.Layout),
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: Dashboard },
-      { path: 'categories', component: Categories },
-      { path: 'expenses', component: Expenses },
-      { path: 'incomes', component: Incomes },
-      { path: 'reports', component: Reports }
+      { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
+      { path: 'categories', loadComponent: () => import('./pages/categories/categories').then(m => m.Categories) },
+      { path: 'expenses', loadComponent: () => import('./pages/expenses/expenses').then(m => m.Expenses) },
+      { path: 'incomes', loadComponent: () => import('./pages/incomes/incomes').then(m => m.Incomes) },
+      { path: 'reports', loadComponent: () => import('./pages/reports/reports').then(m => m.Reports) }
     ]
   }
 ];
