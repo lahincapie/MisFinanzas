@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CategorySpend, ExpenseSpend } from '../models/report.models';
+import { CategorySpend, ExpenseSpend, IncomeReceived } from '../models/report.models';
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
@@ -15,5 +15,8 @@ export class ReportService {
 
   byExpense(from: string, to: string): Observable<ExpenseSpend[]> {
     return this.http.get<ExpenseSpend[]>(`${this.baseUrl}/by-expense`, { params: { from, to } });
+  }
+    byIncome(from: string, to: string): Observable<IncomeReceived[]> {
+    return this.http.get<IncomeReceived[]>(`${this.baseUrl}/by-income`, { params: { from, to } });
   }
 }
