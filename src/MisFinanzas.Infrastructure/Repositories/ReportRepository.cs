@@ -62,5 +62,25 @@ namespace MisFinanzas.Infrastructure.Repositories
                 .OrderByDescending(r => r.Total)
                 .ToListAsync();
         }
+
+        public async Task<List<IncomeReceivedDto>> GetReceivedByIncomeAsync(string from, string to, string userId)
+        {
+            return await _context.IncomeReceipts
+                .Where(r => r.IsActive
+                    && r.IncomeMonthly!.IsActive
+                    && string.Compare(r.IncomeMonthly.Month, from) >= 0
+                    && string.Compare(r.IncomeMonthly.Month, to) <= 0
+                    && r.IncomeMonthly.Income!.IsActive
+                    && r.IncomeMonthly.Income.UserId == userId)
+                .GroupBy(r => new { r.IncomeMonthly!.Income!.Id, r.IncomeMonthly.Income.Name })
+                .Select(g => new IncomeReceivedDto
+                {
+                    IncomeId = g.Key.Id,
+                    IncomeName = g.Key.Name,
+                    Total = g.Sum(x => x.Amount)
+                })
+                .OrderByDescending(r => r.Total)
+                .ToListAsync();
+        }
     }
 }

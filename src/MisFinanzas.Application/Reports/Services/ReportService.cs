@@ -39,5 +39,11 @@ namespace MisFinanzas.Application.Reports.Services
 
         private static bool IsValidMonth(string month) =>
             System.Text.RegularExpressions.Regex.IsMatch(month ?? "", @"^\d{4}-(0[1-9]|1[0-2])$");
+
+        public Task<List<IncomeReceivedDto>> GetReceivedByIncomeAsync(string from, string to, string userId)
+        {
+            NormalizeRange(ref from, ref to);
+            return _repository.GetReceivedByIncomeAsync(from, to, userId);
+        }
     }
 }

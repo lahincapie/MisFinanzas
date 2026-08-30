@@ -7,5 +7,6 @@ namespace MisFinanzas.Application.Reports.Interfaces
     {
         Task<List<CategorySpendDto>> GetSpendByCategoryAsync(string from, string to, string userId);
         Task<List<ExpenseSpendDto>> GetSpendByExpenseAsync(string from, string to, string userId);
+        Task<List<IncomeReceivedDto>> GetReceivedByIncomeAsync(string from, string to, string userId);
     }
 }

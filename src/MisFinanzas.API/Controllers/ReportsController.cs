@@ -30,5 +30,11 @@ namespace MisFinanzas.API.Controllers
             var data = await _service.GetSpendByExpenseAsync(from, to, CurrentUserId);
             return Ok(data);
         }
+        [HttpGet("by-income")]
+        public async Task<IActionResult> ByIncome([FromQuery] string from, [FromQuery] string to)
+        {
+            var data = await _service.GetReceivedByIncomeAsync(from, to, CurrentUserId);
+            return Ok(data);
+        }
     }
 }
