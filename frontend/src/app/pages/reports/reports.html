@@ -65,15 +65,21 @@
 
     @if (rows().length > 0) {
       <div class="chart-card">
-        <h2 class="card-title">{{ view() === 'category' ? 'Gasto por categoría' : 'Gasto por concepto' }}</h2>
+                <h2 class="card-title">
+          {{ view() === 'category' ? 'Gasto por categoría' : 'Gasto por concepto' }}
+          <span class="card-range">{{ appliedFrom() + '-01' | date:'MMM yyyy' }} – {{ appliedTo() + '-01' | date:'MMM yyyy' }}</span>
+        </h2>
         @for (row of rows(); track row.label) {
           <div class="bar-row">
             <span class="bar-label">
-              {{ row.label }}
-              @if (row.sub) { <span class="bar-sub">{{ row.sub }}</span> }
+              <mat-icon class="cat-icon" [style.color]="colorFor(row.categoryName)">{{ iconFor(row.categoryName) }}</mat-icon>
+              <span class="bar-label-text">
+                {{ row.label }}
+                @if (row.sub) { <span class="bar-sub">{{ row.sub }}</span> }
+              </span>
             </span>
             <div class="bar-track">
-              <div class="bar-fill" [style.width.%]="barWidth(row.total)"></div>
+              <div class="bar-fill" [style.width.%]="barWidth(row.total)" [style.background-color]="colorFor(row.categoryName)"></div>
             </div>
             <span class="bar-value">{{ row.total | currency:'COP' }}</span>
           </div>
