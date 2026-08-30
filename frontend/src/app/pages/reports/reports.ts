@@ -8,7 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { ReportService } from '../../services/report.service';
 import { CategoryService } from '../../services/category.service';
-import { CategorySpend, ExpenseSpend } from '../../models/report.models';
+import { CategorySpend, ExpenseSpend, IncomeReceived } from '../../models/report.models';
 import { Category } from '../../models/category.models';
 import { MONTHS, YEARS } from '../../shared/options';
 
@@ -36,22 +36,33 @@ export class Reports implements OnInit {
   toMonth = String(this.now.getMonth() + 1).padStart(2, '0');
   toYear = String(this.now.getFullYear());
 
+  mode = signal<'expenses' | 'incomes'>('expenses');
   view = signal<'category' | 'expense'>('category');
   categoryData = signal<CategorySpend[]>([]);
   expenseData = signal<ExpenseSpend[]>([]);
+  incomeData = signal<IncomeReceived[]>([]);
   categories = signal<Category[]>([]);
   loading = signal(false);
   appliedFrom = signal('');
   appliedTo = signal('');
 
-  rows = computed<ReportRow[]>(() =>
-    this.view() === 'category'
+  rows = computed<ReportRow[]>(() => {
+    if (this.mode() === 'incomes') {
+      return this.incomeData().map(r => ({ label: r.incomeName, sub: '', categoryName: '', total: r.total }));
+    }
+    return this.view() === 'category'
       ? this.categoryData().map(r => ({ label: r.categoryName, sub: '', categoryName: r.categoryName, total: r.total }))
-      : this.expenseData().map(r => ({ label: r.expenseName, sub: r.categoryName, categoryName: r.categoryName, total: r.total }))
-  );
+      : this.expenseData().map(r => ({ label: r.expenseName, sub: r.categoryName, categoryName: r.categoryName, total: r.total }));
+  });
 
   total = computed(() => this.rows().reduce((s, r) => s + r.total, 0));
   maxTotal = computed(() => this.rows().reduce((m, r) => Math.max(m, r.total), 0));
+
+  cardTitle = computed(() =>
+    this.mode() === 'incomes'
+      ? 'Ingresos recibidos'
+      : (this.view() === 'category' ? 'Gasto por categoría' : 'Gasto por concepto')
+  );
 
   ngOnInit(): void {
     this.loadCategories();
@@ -73,6 +84,20 @@ export class Reports implements OnInit {
     return this.categories().find(c => c.name === categoryName)?.icon ?? 'category';
   }
 
+  rowColor(row: ReportRow): string {
+    return this.mode() === 'incomes' ? 'var(--color-income)' : this.colorFor(row.categoryName);
+  }
+
+  rowIcon(row: ReportRow): string {
+    return this.mode() === 'incomes' ? 'savings' : this.iconFor(row.categoryName);
+  }
+
+  setMode(m: 'expenses' | 'incomes'): void {
+    if (this.mode() === m) return;
+    this.mode.set(m);
+    this.load();
+  }
+
   setView(v: 'category' | 'expense'): void {
     if (this.view() === v) return;
     this.view.set(v);
@@ -85,6 +110,15 @@ export class Reports implements OnInit {
     this.appliedFrom.set(from);
     this.appliedTo.set(to);
     this.loading.set(true);
+
+    if (this.mode() === 'incomes') {
+      this.reportService.byIncome(from, to).subscribe({
+        next: (d) => { this.incomeData.set(d); this.loading.set(false); },
+        error: (err) => { console.error('Error al cargar el reporte:', err); this.loading.set(false); }
+      });
+      return;
+    }
+
     if (this.view() === 'category') {
       this.reportService.byCategory(from, to).subscribe({
         next: (d) => { this.categoryData.set(d); this.loading.set(false); },

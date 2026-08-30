@@ -2,7 +2,7 @@
   <div class="page-header">
     <div>
       <h1>Reportes</h1>
-      <p class="page-sub">Cuánto has gastado (real) en un rango de meses.</p>
+      <p class="page-sub">Tus movimientos reales (gastos e ingresos) en un rango de meses.</p>
     </div>
   </div>
 
@@ -51,9 +51,16 @@
   </div>
 
   <div class="view-toggle">
-    <button type="button" class="toggle-btn" [class.active]="view() === 'category'" (click)="setView('category')">Por categoría</button>
-    <button type="button" class="toggle-btn" [class.active]="view() === 'expense'" (click)="setView('expense')">Por gasto</button>
+    <button type="button" class="toggle-btn" [class.active]="mode() === 'expenses'" (click)="setMode('expenses')">Gastos</button>
+    <button type="button" class="toggle-btn" [class.active]="mode() === 'incomes'" (click)="setMode('incomes')">Ingresos</button>
   </div>
+
+  @if (mode() === 'expenses') {
+    <div class="view-toggle">
+      <button type="button" class="toggle-btn" [class.active]="view() === 'category'" (click)="setView('category')">Por categoría</button>
+      <button type="button" class="toggle-btn" [class.active]="view() === 'expense'" (click)="setView('expense')">Por gasto</button>
+    </div>
+  }
 
   @if (loading()) {
     <div class="loading"><mat-spinner diameter="40"></mat-spinner></div>
@@ -65,21 +72,21 @@
 
     @if (rows().length > 0) {
       <div class="chart-card">
-                <h2 class="card-title">
-          {{ view() === 'category' ? 'Gasto por categoría' : 'Gasto por concepto' }}
+        <h2 class="card-title">
+          {{ cardTitle() }}
           <span class="card-range">{{ appliedFrom() + '-01' | date:'MMM yyyy' }} – {{ appliedTo() + '-01' | date:'MMM yyyy' }}</span>
         </h2>
         @for (row of rows(); track row.label) {
           <div class="bar-row">
             <span class="bar-label">
-              <mat-icon class="cat-icon" [style.color]="colorFor(row.categoryName)">{{ iconFor(row.categoryName) }}</mat-icon>
+              <mat-icon class="cat-icon" [style.color]="rowColor(row)">{{ rowIcon(row) }}</mat-icon>
               <span class="bar-label-text">
                 {{ row.label }}
                 @if (row.sub) { <span class="bar-sub">{{ row.sub }}</span> }
               </span>
             </span>
             <div class="bar-track">
-              <div class="bar-fill" [style.width.%]="barWidth(row.total)" [style.background-color]="colorFor(row.categoryName)"></div>
+              <div class="bar-fill" [style.width.%]="barWidth(row.total)" [style.background-color]="rowColor(row)"></div>
             </div>
             <span class="bar-value">{{ row.total | currency:'COP' }}</span>
           </div>
@@ -89,7 +96,7 @@
       <table class="reports-table">
         <thead>
           <tr>
-            <th>{{ view() === 'category' ? 'Categoría' : 'Gasto' }}</th>
+            <th>{{ mode() === 'incomes' ? 'Ingreso' : (view() === 'category' ? 'Categoría' : 'Gasto') }}</th>
             <th class="num">Total</th>
             <th class="num">% del total</th>
           </tr>
@@ -108,7 +115,7 @@
         </tbody>
       </table>
     } @else {
-      <p class="empty-msg">No hay gastos registrados en este rango.</p>
+      <p class="empty-msg">{{ mode() === 'incomes' ? 'No hay ingresos recibidos en este rango.' : 'No hay gastos registrados en este rango.' }}</p>
     }
   }
 </div>

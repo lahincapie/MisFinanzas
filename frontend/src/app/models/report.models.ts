@@ -9,3 +9,8 @@ export interface ExpenseSpend {
   categoryName: string;
   total: number;
 }
+export interface IncomeReceived {
+  incomeId: number;
+  incomeName: string;
+  total: number;
+}
