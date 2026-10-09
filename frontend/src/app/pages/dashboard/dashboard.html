@@ -63,6 +63,12 @@
           <mat-icon class="header-icon">payments</mat-icon>
           <h2>Gastos del mes</h2>
           <div class="filters">
+            <select class="cat-select" [value]="categoryFilter()" (change)="categoryFilter.set($any($event.target).value)">
+              <option value="">Todas</option>
+              @for (cat of expenseCategories(); track cat) {
+                <option [value]="cat">{{ cat }}</option>
+              }
+            </select>
             <button class="filter-chip" [class.active]="expenseFilter() === 'todos'" (click)="expenseFilter.set('todos')">Todos</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'pendientes'" (click)="expenseFilter.set('pendientes')">Pendientes</button>
             <button class="filter-chip" [class.active]="expenseFilter() === 'vencidos'" (click)="expenseFilter.set('vencidos')">Vencidos</button>

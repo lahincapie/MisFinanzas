@@ -250,10 +250,27 @@ h2 {
     font-size: 0.72rem;
     color: #9a9aaa;
 }
+.cat-select {
+    border: 1px solid #d5d5e0;
+    border-radius: 14px;
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    color: #6a6a7a;
+    background: var(--color-surface);
+    font-family: var(--font-base);
+    cursor: pointer;
+    max-width: 160px;
+}
+
+.list-header {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+}
 .filters {
     margin-left: auto;
     display: flex;
     gap: 0.4rem;
+    align-items: center;
 }
 
 .filter-chip {
