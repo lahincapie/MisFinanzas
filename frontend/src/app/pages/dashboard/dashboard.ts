@@ -44,18 +44,26 @@ export class Dashboard implements OnInit {
   expensesPendingCount = computed(() => this.data()?.expenses.filter(e => e.status === 'Pendiente').length ?? 0);
   incomesTotal = computed(() => this.data()?.incomes.length ?? 0);
   incomesReceivedCount = computed(() => this.data()?.incomes.filter(i => i.status === 'Recibido').length ?? 0);
+  expenseCategories = computed(() => {
+    const items = this.data()?.expenses ?? [];
+    return [...new Set(items.map(e => e.categoryName))].sort();
+  });
 
   expenseFilter = signal<'todos' | 'pendientes' | 'pagados' | 'vencidos' | 'omitidos'>('todos');
+  categoryFilter = signal<string>('');
   incomeFilter = signal<'todos' | 'pendientes' | 'recibidos'>('todos');
 
-  filteredExpenses = computed(() => {
+    filteredExpenses = computed(() => {
     const items = this.data()?.expenses ?? [];
     const f = this.expenseFilter();
-    if (f === 'pendientes') return items.filter(e => e.status === 'Pendiente' && !e.isOverdue);
-    if (f === 'pagados') return items.filter(e => e.status === 'Pagado');
-    if (f === 'omitidos') return items.filter(e => e.status === 'Omitido');
-    if (f === 'vencidos') return items.filter(e => e.isOverdue);
-    return items;
+    const cat = this.categoryFilter();
+    let result = items;
+    if (f === 'pendientes') result = result.filter(e => e.status === 'Pendiente');
+    else if (f === 'pagados') result = result.filter(e => e.status === 'Pagado');
+    else if (f === 'vencidos') result = result.filter(e => e.isOverdue);
+    else if (f === 'omitidos') result = result.filter(e => e.status === 'Omitido');
+    if (cat) result = result.filter(e => e.categoryName === cat);
+    return result;
   });
 
   filteredIncomes = computed(() => {
@@ -104,6 +112,7 @@ export class Dashboard implements OnInit {
     const [year, month] = this.currentMonth().split('-').map(Number);
     const date = new Date(year, month - 1 + delta, 1);
     this.currentMonth.set(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`);
+    this.categoryFilter.set('');
     this.loadDashboard();
   }
 
