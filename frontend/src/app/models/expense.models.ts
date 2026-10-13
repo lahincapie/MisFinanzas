@@ -38,3 +38,9 @@ export interface ExpensePaymentRequest {
   paymentMethodId: number;
   notes?: string | null;
 }
+export interface OneOffExpenseRequest {
+  name: string;
+  amount: number;
+  paymentMethodId: number;
+  notes?: string | null;
+}

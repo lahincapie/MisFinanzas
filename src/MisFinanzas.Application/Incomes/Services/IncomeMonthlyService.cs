@@ -32,6 +32,7 @@ namespace MisFinanzas.Application.Incomes.Services
 
             foreach (var income in incomes)
             {
+                if (income.IsOneOff) continue;   // los únicos no se generan
                 bool applies = ScheduleCalculator.AppliesToMonth(
             income.Periodicity, income.AnchorMonth, income.StartMonth, income.EndMonth, month);
 

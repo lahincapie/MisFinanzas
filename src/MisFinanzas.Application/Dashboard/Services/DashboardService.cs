@@ -57,6 +57,7 @@ namespace MisFinanzas.Application.Dashboard.Services
                 {
                     ExpenseId = m.ExpenseId,       // ← la FK del registro mensual, siempre confiable
                     Name = expense.Name,
+                    IsOneOff = expense.IsOneOff,
                     CategoryName = expense.Category?.Name ?? "(sin categoría)",
                     Status = m.Status switch
                     {
@@ -98,6 +99,7 @@ namespace MisFinanzas.Application.Dashboard.Services
                 {
                     IncomeId = m.IncomeId,
                     Name = income.Name,
+                    IsOneOff = income.IsOneOff,
                     Status = m.Status == IncomeStatus.Received ? "Recibido" : "Pendiente",
                     ReceivedAmount = receipt?.Amount,
                     ProjectedAmount = projected,

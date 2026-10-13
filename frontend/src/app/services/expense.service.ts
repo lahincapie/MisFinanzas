@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Expense, ExpenseRequest, ExpensePaymentRequest } from '../models/expense.models';
+import { Expense, ExpenseRequest, ExpensePaymentRequest, OneOffExpenseRequest } from '../models/expense.models';
+
 
 @Injectable({ providedIn: 'root' })
 export class ExpenseService {
@@ -42,5 +43,8 @@ export class ExpenseService {
 
   unskip(id: number, month: string): Observable<unknown> {
     return this.http.post(`${this.baseUrl}/${id}/months/${month}/unskip`, null);
+  }
+  createOneOff(data: OneOffExpenseRequest): Observable<unknown> {
+    return this.http.post(`${this.baseUrl}/one-off`, data);
   }
 }

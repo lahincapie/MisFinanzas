@@ -29,5 +29,7 @@
 
         /// <summary>Observaciones del pago (opcional).</summary>
         public string? PaymentNotes { get; set; }
+        /// <summary>True si es un movimiento único (no recurrente).</summary>
+        public bool IsOneOff { get; set; }
     }
 }

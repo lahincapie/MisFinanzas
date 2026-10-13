@@ -1,0 +1,39 @@
+<h2 mat-dialog-title class="dialog-header">
+  <span class="dialog-title-text">
+    <mat-icon class="title-icon">bolt</mat-icon>
+    Ingreso único
+  </span>
+  <button matIconButton type="button" (click)="cancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div class="field-group">
+      <label class="field-label">Nombre <span class="hint">· ej. Venta, reembolso</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput formControlName="name" placeholder="¿De qué fue?" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Monto</label>
+      <mat-form-field appearance="outline">
+        <input matInput type="number" formControlName="amount" placeholder="$ 100.000" />
+      </mat-form-field>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Observaciones <span class="hint">· opcional</span></label>
+      <mat-form-field appearance="outline">
+        <input matInput formControlName="notes" placeholder="Nota (opcional)" />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton type="button" (click)="cancel()">Cancelar</button>
+  <button matButton="filled" type="button" [disabled]="form.invalid" (click)="save()">Registrar ingreso</button>
+</mat-dialog-actions>

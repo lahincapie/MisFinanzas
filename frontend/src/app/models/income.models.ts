@@ -26,3 +26,8 @@ export interface IncomeReceiptRequest {
   receiptDate: string;
   notes?: string | null;
 }
+export interface OneOffIncomeRequest {
+  name: string;
+  amount: number;
+  notes?: string | null;
+}

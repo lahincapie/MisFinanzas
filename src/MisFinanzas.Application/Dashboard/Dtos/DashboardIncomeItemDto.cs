@@ -25,5 +25,7 @@
 
         /// <summary>Observaciones de la recepción (opcional).</summary>
         public string? ReceiptNotes { get; set; }
+        /// <summary>True si es un movimiento único (no recurrente).</summary>
+        public bool IsOneOff { get; set; }
     }
 }

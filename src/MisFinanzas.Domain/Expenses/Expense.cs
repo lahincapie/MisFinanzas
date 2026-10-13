@@ -37,6 +37,11 @@ namespace MisFinanzas.Domain.Expenses
         /// Si es false (fijo), usa ExpectedAmount.
         /// </summary>
         public bool IsVariable { get; set; }
+        /// <summary>
+        /// Si es true, es un gasto ÚNICO (no recurrente): no entra en la generación
+        /// mensual ni en la lista de gestión; vive solo en el mes en que se creó.
+        /// </summary>
+        public bool IsOneOff { get; set; }
 
         /// <summary>Valor esperado del gasto si es fijo. Nulo si es variable.</summary>
         public decimal? ExpectedAmount { get; set; }
