@@ -61,7 +61,7 @@ namespace MisFinanzas.Application.Incomes.Services
         {
             var incomes = await _repository.GetAllActiveAsync(userId);
 
-            return incomes.Select(i => new IncomeDto
+            return incomes.Where(i => !i.IsOneOff).Select(i => new IncomeDto
             {
                 Id = i.Id,
                 Name = i.Name,

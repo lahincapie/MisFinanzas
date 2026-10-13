@@ -75,7 +75,7 @@ namespace MisFinanzas.Application.Expenses.Services
         {
             var expenses = await _repository.GetAllActiveAsync(userId);
 
-            return expenses.Select(e => new ExpenseDto
+            return expenses.Where(e => !e.IsOneOff).Select(e => new ExpenseDto
             {
                 Id = e.Id,
                 Name = e.Name,

@@ -11,14 +11,16 @@ import { CategoryService } from '../../services/category.service';
 import { PaymentMethodService } from '../../services/payment-method.service';
 import { Category } from '../../models/category.models';
 import { DashboardData, DashboardExpenseItem, DashboardIncomeItem } from '../../models/dashboard.models';
-import { ExpensePaymentRequest } from '../../models/expense.models';
-import { IncomeReceiptRequest } from '../../models/income.models';
+import { ExpensePaymentRequest, OneOffExpenseRequest } from '../../models/expense.models';
+import { IncomeReceiptRequest, OneOffIncomeRequest } from '../../models/income.models';
 import { PaymentMethod } from '../../models/payment-method.models';
 import { PayDialog } from './pay-dialog/pay-dialog';
 import { ReceiveDialog } from './receive-dialog/receive-dialog';
 import { ConfirmDialog } from '../../confirm-dialog/confirm-dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PaymentDetailDialog } from './payment-detail-dialog/payment-detail-dialog';
+import { OneOffExpenseDialog } from './one-off-expense-dialog/one-off-expense-dialog';
+import { OneOffIncomeDialog } from './one-off-income-dialog/one-off-income-dialog';
 
 @Component({
   selector: 'app-dashboard',
@@ -48,6 +50,7 @@ export class Dashboard implements OnInit {
     const items = this.data()?.expenses ?? [];
     return [...new Set(items.map(e => e.categoryName))].sort();
   });
+  isCurrentMonth = computed(() => this.currentMonth() === this.getCurrentMonth());
 
   expenseFilter = signal<'todos' | 'pendientes' | 'pagados' | 'vencidos' | 'omitidos'>('todos');
   categoryFilter = signal<string>('');
@@ -248,6 +251,66 @@ export class Dashboard implements OnInit {
     this.dashboardService.get(this.currentMonth()).subscribe({
       next: (d) => this.data.set(d),
       error: (err) => console.error('Error al cargar dashboard:', err)
+    });
+  }
+    openOneOffExpense(): void {
+    const ref = this.dialog.open(OneOffExpenseDialog, {
+      data: { paymentMethods: this.paymentMethods() }
+    });
+    ref.afterClosed().subscribe((result: OneOffExpenseRequest | undefined) => {
+      if (!result) return;
+      this.expenseService.createOneOff(result).subscribe({
+        next: () => this.loadDashboard(),
+        error: (err) => console.error('Error al crear gasto único:', err)
+      });
+    });
+  }
+
+  openOneOffIncome(): void {
+    const ref = this.dialog.open(OneOffIncomeDialog);
+    ref.afterClosed().subscribe((result: OneOffIncomeRequest | undefined) => {
+      if (!result) return;
+      this.incomeService.createOneOff(result).subscribe({
+        next: () => this.loadDashboard(),
+        error: (err) => console.error('Error al crear ingreso único:', err)
+      });
+    });
+  }
+    deleteOneOffExpense(exp: DashboardExpenseItem): void {
+    const ref = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Borrar gasto único',
+        message: `¿Borrar <strong>${exp.name}</strong>? Se quitará del mes y de los reportes.`,
+        confirmLabel: 'Borrar',
+        icon: 'delete',
+        danger: true
+      }
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.expenseService.delete(exp.expenseId).subscribe({
+        next: () => this.loadDashboard(),
+        error: (err) => console.error('Error al borrar:', err)
+      });
+    });
+  }
+
+  deleteOneOffIncome(inc: DashboardIncomeItem): void {
+    const ref = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Borrar ingreso único',
+        message: `¿Borrar <strong>${inc.name}</strong>? Se quitará del mes y de los reportes.`,
+        confirmLabel: 'Borrar',
+        icon: 'delete',
+        danger: true
+      }
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.incomeService.delete(inc.incomeId).subscribe({
+        next: () => this.loadDashboard(),
+        error: (err) => console.error('Error al borrar:', err)
+      });
     });
   }
 }

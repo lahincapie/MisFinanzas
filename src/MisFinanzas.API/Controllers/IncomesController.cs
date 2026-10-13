@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MisFinanzas.Application.Incomes.Dtos;
 using MisFinanzas.Application.Incomes.Interfaces;
+using MisFinanzas.Application.OneOff.Interfaces;
 
 namespace MisFinanzas.API.Controllers
 {
@@ -14,14 +15,17 @@ namespace MisFinanzas.API.Controllers
         private readonly IIncomeService _service;
         private readonly IIncomeMonthlyService _monthlyService;
         private readonly IIncomeReceiptService _receiptService;
+        private readonly IOneOffService _oneOffService;
 
         public IncomesController(IIncomeService service,
             IIncomeMonthlyService monthlyService,
-            IIncomeReceiptService receiptService)
+            IIncomeReceiptService receiptService,
+            IOneOffService oneOffService)
         {
             _service = service;
             _monthlyService = monthlyService;
             _receiptService = receiptService;
+            _oneOffService = oneOffService;
         }
 
         /// <summary>Crea un nuevo ingreso.</summary>
@@ -66,6 +70,14 @@ namespace MisFinanzas.API.Controllers
         {
             var created = await _monthlyService.GenerateForMonthAsync(month, CurrentUserId);
             return Ok(new { month, created });
+        }
+
+        /// <summary>Registra un ingreso único (real) en el mes actual.</summary>
+        [HttpPost("one-off")]
+        public async Task<IActionResult> CreateOneOff([FromBody] CreateOneOffIncomeDto dto)
+        {
+            await _oneOffService.CreateOneOffIncomeAsync(dto, CurrentUserId);
+            return NoContent();
         }
 
         /// <summary>Registra la recepción de un ingreso en un mes (lo marca como Recibido).</summary>

@@ -1,0 +1,7 @@
+.dialog-form {
+    min-width: 380px;
+}
+
+.title-icon {
+    color: var(--color-expense);
+}

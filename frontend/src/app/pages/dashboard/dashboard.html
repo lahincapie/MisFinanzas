@@ -62,6 +62,12 @@
         <div class="list-header">
           <mat-icon class="header-icon">payments</mat-icon>
           <h2>Gastos del mes</h2>
+                    <button matIconButton type="button" class="add-btn"
+                  [disabled]="!isCurrentMonth()"
+                  [title]="isCurrentMonth() ? 'Agregar gasto único' : 'Solo para el mes actual'"
+                  (click)="openOneOffExpense()">
+            <mat-icon>add</mat-icon>
+          </button>
           <div class="filters">
             <select class="cat-select" [value]="categoryFilter()" (change)="categoryFilter.set($any($event.target).value)">
               <option value="">Todas</option>
@@ -117,8 +123,10 @@
                   <span class="amount-label">proyectado</span>
                 }
               </div>
-                            <div class="row-action">
-                @if (e.status === 'Pendiente') {
+              <div class="row-action">
+                @if (e.isOneOff) {
+                  <button matButton type="button" (click)="deleteOneOffExpense(e)">Borrar</button>
+                } @else if (e.status === 'Pendiente') {
                   <button matButton="filled" type="button" (click)="openPayDialog(e)">Pagar</button>
                   <button matButton type="button" (click)="skipExpense(e)">Omitir</button>
                 } @else if (e.status === 'Omitido') {
@@ -138,6 +146,12 @@
         <div class="list-header">
           <mat-icon class="header-icon">savings</mat-icon>
           <h2>Ingresos del mes</h2>
+                    <button matIconButton type="button" class="add-btn"
+                  [disabled]="!isCurrentMonth()"
+                  [title]="isCurrentMonth() ? 'Agregar ingreso único' : 'Solo para el mes actual'"
+                  (click)="openOneOffIncome()">
+            <mat-icon>add</mat-icon>
+          </button>
           <div class="filters">
             <button class="filter-chip" [class.active]="incomeFilter() === 'todos'" (click)="incomeFilter.set('todos')">Todos</button>
             <button class="filter-chip" [class.active]="incomeFilter() === 'pendientes'" (click)="incomeFilter.set('pendientes')">Pendientes</button>
@@ -180,7 +194,9 @@
                 }
               </div>
               <div class="row-action">
-                @if (i.status === 'Pendiente') {
+                @if (i.isOneOff) {
+                  <button matButton type="button" (click)="deleteOneOffIncome(i)">Borrar</button>
+                } @else if (i.status === 'Pendiente') {
                   <button matButton="filled" type="button" (click)="openReceiveDialog(i)">Recibir</button>
                 } @else {
                   <button matButton type="button" (click)="revertIncome(i)">Revertir</button>

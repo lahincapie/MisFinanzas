@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MisFinanzas.Application.Expenses.Dtos;
 using MisFinanzas.Application.Expenses.Interfaces;
+using MisFinanzas.Application.OneOff.Interfaces;
 
 namespace MisFinanzas.API.Controllers
 {
@@ -14,14 +15,17 @@ namespace MisFinanzas.API.Controllers
         private readonly IExpenseService _service;
         private readonly IExpenseMonthlyService _monthlyService;
         private readonly IExpensePaymentService _paymentService;
+        private readonly IOneOffService _oneOffService;
 
         public ExpensesController(IExpenseService service, 
             IExpenseMonthlyService monthlyService,
-            IExpensePaymentService paymentService)
+            IExpensePaymentService paymentService,
+            IOneOffService oneOffService)
         {
             _service = service;
             _monthlyService = monthlyService;
             _paymentService = paymentService;
+            _oneOffService = oneOffService;
         }
 
         /// <summary>Crea un nuevo gasto.</summary>
@@ -74,6 +78,14 @@ namespace MisFinanzas.API.Controllers
             int id, string month, [FromBody] RegisterExpensePaymentDto dto)
         {
             await _paymentService.RegisterPaymentAsync(id, month, dto, CurrentUserId);
+            return NoContent();
+        }
+
+        /// <summary>Registra un gasto único (real) en el mes actual.</summary>
+        [HttpPost("one-off")]
+        public async Task<IActionResult> CreateOneOff([FromBody] CreateOneOffExpenseDto dto)
+        {
+            await _oneOffService.CreateOneOffExpenseAsync(dto, CurrentUserId);
             return NoContent();
         }
 

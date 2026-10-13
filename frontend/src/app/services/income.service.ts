@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Income, IncomeRequest, IncomeReceiptRequest } from '../models/income.models';
+import { Income, IncomeRequest, IncomeReceiptRequest, OneOffIncomeRequest } from '../models/income.models';
 
 @Injectable({ providedIn: 'root' })
 export class IncomeService {
@@ -34,5 +34,8 @@ export class IncomeService {
 
   revert(id: number, month: string): Observable<unknown> {
     return this.http.post(`${this.baseUrl}/${id}/months/${month}/revert`, null);
+  }
+  createOneOff(data: OneOffIncomeRequest): Observable<unknown> {
+    return this.http.post(`${this.baseUrl}/one-off`, data);
   }
 }

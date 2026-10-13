@@ -326,3 +326,6 @@ h2 {
 .row-main.clickable:hover .row-name {
     text-decoration: underline;
 }
+.add-btn {
+    color: var(--color-primary);
+}

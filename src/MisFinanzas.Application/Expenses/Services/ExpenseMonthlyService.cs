@@ -36,6 +36,7 @@ namespace MisFinanzas.Application.Expenses.Services
             // 3. Por cada gasto que aplique y no exista aún, crear su pendiente
             foreach (var expense in expenses)
             {
+                if (expense.IsOneOff) continue;   // los únicos no se generan
                 bool applies = ScheduleCalculator.AppliesToMonth(
                     expense.Periodicity, expense.AnchorMonth, expense.StartMonth, expense.EndMonth, month);
 

@@ -1,6 +1,7 @@
 export interface DashboardExpenseItem {
   expenseId: number;
   name: string;
+  isOneOff: boolean;
   categoryName: string;
   status: string;
   paidAmount: number | null;
@@ -15,6 +16,7 @@ export interface DashboardExpenseItem {
 export interface DashboardIncomeItem {
   incomeId: number;
   name: string;
+  isOneOff: boolean;
   status: string;
   receivedAmount: number | null;
   projectedAmount: number;

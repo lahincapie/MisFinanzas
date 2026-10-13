@@ -238,6 +238,9 @@ namespace MisFinanzas.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsOneOff")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVariable")
                         .HasColumnType("bit");
 
@@ -387,6 +390,9 @@ namespace MisFinanzas.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOneOff")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVariable")
