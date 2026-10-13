@@ -7,11 +7,23 @@ using MisFinanzas.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ---------- Servicios (inyección de dependencias) ----------
+// ---------- Servicios (inyecciï¿½n de dependencias) ----------
+
+// Lectura de secretos (User Secrets en dev, variables de entorno en produccion).
+// Si falta alguno, la app NO arranca y avisa claramente que configurar.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "Falta la cadena de conexion 'ConnectionStrings:DefaultConnection'. " +
+        "Configurala con: dotnet user-secrets set \"ConnectionStrings:DefaultConnection\" \"...\"");
+
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+    throw new InvalidOperationException(
+        "Falta la clave JWT 'Jwt:Key'. " +
+        "Configurala con: dotnet user-secrets set \"Jwt:Key\" \"...\"");
 
 // Capas del proyecto
-builder.Services.AddInfrastructure(
-    builder.Configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddInfrastructure(connectionString);
 builder.Services.AddApplication();
 
 // Controllers y Swagger
@@ -19,7 +31,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Autenticación con JWT
+// Autenticaciï¿½n con JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -32,7 +44,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
@@ -64,7 +76,7 @@ app.UseHttpsRedirection();
 app.UseDefaultFiles();   // si piden "/", busca index.html por defecto
 app.UseStaticFiles();    // entrega los archivos de wwwroot (js, css, html)
 
-// 3. Primero autenticación (¿quién eres?), luego autorización (¿puedes?)
+// 3. Primero autenticaciï¿½n (ï¿½quiï¿½n eres?), luego autorizaciï¿½n (ï¿½puedes?)
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
