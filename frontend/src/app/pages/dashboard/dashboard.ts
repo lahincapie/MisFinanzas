@@ -56,6 +56,22 @@ export class Dashboard implements OnInit {
   categoryFilter = signal<string>('');
   incomeFilter = signal<'todos' | 'pendientes' | 'recibidos'>('todos');
 
+  // Cuadre de caja: plata real en mano que la usuaria ingresa (se guarda por mes en el navegador).
+  cashOnHand = signal<number | null>(null);
+
+  // Descuadre = plata real - balance. Negativo: tienes menos de lo que la app cree
+  // (plata movida a CDTs/ahorro o gastos sin registrar). Positivo: tienes mas (ingresos sin registrar).
+  descuadreReal = computed(() => {
+    const cash = this.cashOnHand();
+    const d = this.data();
+    return cash === null || !d ? null : cash - d.realBalance;
+  });
+  descuadreProyectado = computed(() => {
+    const cash = this.cashOnHand();
+    const d = this.data();
+    return cash === null || !d ? null : cash - d.projectedBalance;
+  });
+
     filteredExpenses = computed(() => {
     const items = this.data()?.expenses ?? [];
     const f = this.expenseFilter();
@@ -82,6 +98,29 @@ export class Dashboard implements OnInit {
     this.loadDashboard();
     this.loadPaymentMethods();
     this.loadCategories();
+    this.loadCashOnHand();
+  }
+
+  private cashKey(): string {
+    return `cuadre:${this.currentMonth()}`;
+  }
+
+  loadCashOnHand(): void {
+    const raw = localStorage.getItem(this.cashKey());
+    this.cashOnHand.set(raw !== null && raw !== '' ? Number(raw) : null);
+  }
+
+  onCashInput(value: string): void {
+    const trimmed = value.trim();
+    if (trimmed === '') {
+      this.cashOnHand.set(null);
+      localStorage.removeItem(this.cashKey());
+      return;
+    }
+    const n = Number(trimmed);
+    if (Number.isNaN(n)) return;
+    this.cashOnHand.set(n);
+    localStorage.setItem(this.cashKey(), String(n));
   }
 
   loadCategories(): void {
@@ -117,6 +156,7 @@ export class Dashboard implements OnInit {
     this.currentMonth.set(`${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`);
     this.categoryFilter.set('');
     this.loadDashboard();
+    this.loadCashOnHand();
   }
 
   generatePendings(): void {

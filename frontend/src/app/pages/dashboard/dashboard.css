@@ -329,3 +329,122 @@ h2 {
 .add-btn {
     color: var(--color-primary);
 }
+
+/* ---------- Cuadre de caja ---------- */
+.cuadre-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    border-left: 5px solid #5b4fc4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.cuadre-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.cuadre-head mat-icon {
+    color: #5b4fc4;
+}
+
+.cuadre-head h2 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.cuadre-sub {
+    margin: 0.15rem 0 0;
+    font-size: 0.8rem;
+    color: #9a9aaa;
+}
+
+.cuadre-body {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.cuadre-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 0 0 300px;
+}
+
+.cuadre-input label {
+    font-size: 0.75rem;
+    color: #8a8a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.cuadre-input input {
+    border: 1px solid #d5d5e0;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 1.1rem;
+    font-family: var(--font-base);
+    color: #1a1a2e;
+}
+
+.cuadre-input input:focus {
+    outline: none;
+    border-color: #5b4fc4;
+    box-shadow: 0 0 0 3px #ece9ff;
+}
+
+.cuadre-results {
+    flex: 1;
+    min-width: 280px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.cuadre-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: var(--color-bg);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+}
+
+.cuadre-label {
+    font-size: 0.75rem;
+    color: #8a8a9a;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.cuadre-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+
+.cuadre-value.pos {
+    color: #2e7d32;
+}
+
+.cuadre-value.neg {
+    color: #c62828;
+}
+
+.cuadre-hint {
+    margin: 1rem 0 0;
+    font-size: 0.8rem;
+    color: #9a9aaa;
+    line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+    .cuadre-results {
+        grid-template-columns: 1fr;
+    }
+}

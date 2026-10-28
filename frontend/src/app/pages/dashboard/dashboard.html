@@ -57,6 +57,54 @@
       </div>
     </div>
 
+    <div class="cuadre-card">
+      <div class="cuadre-head">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <div>
+          <h2>Cuadre de caja</h2>
+          <p class="cuadre-sub">Compara lo que la app calcula con lo que de verdad tienes en mano.</p>
+        </div>
+      </div>
+
+      <div class="cuadre-body">
+        <div class="cuadre-input">
+          <label for="cashOnHand">Plata real en mano (débito + efectivo)</label>
+          <input id="cashOnHand" type="number" inputmode="numeric" min="0"
+                 [value]="cashOnHand() ?? ''"
+                 (input)="onCashInput($any($event.target).value)"
+                 placeholder="¿Cuánto tienes de verdad?">
+        </div>
+
+        @if (cashOnHand() !== null) {
+          <div class="cuadre-results">
+            <div class="cuadre-item">
+              <span class="cuadre-label">Descuadre vs balance real</span>
+              <span class="cuadre-value"
+                    [class.pos]="(descuadreReal() ?? 0) >= 0"
+                    [class.neg]="(descuadreReal() ?? 0) < 0">
+                {{ descuadreReal() | currency:'COP' }}
+              </span>
+            </div>
+            <div class="cuadre-item">
+              <span class="cuadre-label">Descuadre vs balance proyectado</span>
+              <span class="cuadre-value"
+                    [class.pos]="(descuadreProyectado() ?? 0) >= 0"
+                    [class.neg]="(descuadreProyectado() ?? 0) < 0">
+                {{ descuadreProyectado() | currency:'COP' }}
+              </span>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (cashOnHand() !== null) {
+        <p class="cuadre-hint">
+          Si el número da negativo, tienes menos de lo que la app cree: suele ser plata movida a
+          CDTs/ahorro o gastos que no registraste. Si da positivo, hay ingresos sin registrar.
+        </p>
+      }
+    </div>
+
     <div class="lists">
       <div class="list-card">
         <div class="list-header">
