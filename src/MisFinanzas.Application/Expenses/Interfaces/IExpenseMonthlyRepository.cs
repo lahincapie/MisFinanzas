@@ -40,5 +40,11 @@ namespace MisFinanzas.Application.Expenses.Interfaces
         /// </summary>
         Task<int> DeactivateFutureNonRealAsync(int expenseId, string untilMonth);
 
+        /// <summary>
+        /// Desactiva TODAS las ocurrencias aún no reales (Pendiente/Omitido) de un gasto,
+        /// de cualquier mes. No toca las pagadas. Para la desactivación en cascada (RN-19).
+        /// </summary>
+        Task<int> DeactivateAllNonRealAsync(int expenseId);
+
     }
 }

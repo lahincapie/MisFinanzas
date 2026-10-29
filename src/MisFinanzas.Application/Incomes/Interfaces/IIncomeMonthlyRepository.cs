@@ -20,5 +20,11 @@ namespace MisFinanzas.Application.Incomes.Interfaces
         /// <summary>Trae los registros mensuales de ingreso de un mes, con su ingreso y su recepción activa.</summary>
         Task<List<IncomeMonthly>> GetMonthWithDetailsAsync(string month, string userId);
 
+        /// <summary>
+        /// Desactiva TODAS las ocurrencias aún no reales (Pendiente) de un ingreso, de cualquier mes.
+        /// No toca las recibidas. Para la desactivación en cascada (RN-19).
+        /// </summary>
+        Task<int> DeactivateAllNonRealAsync(int incomeId);
+
     }
 }
