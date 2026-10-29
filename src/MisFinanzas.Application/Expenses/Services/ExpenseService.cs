@@ -14,17 +14,20 @@ namespace MisFinanzas.Application.Expenses.Services
     {
         private readonly IExpenseRepository _repository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IExpenseMonthlyRepository _monthlyRepository;
         private readonly IValidator<CreateExpenseDto> _createValidator;
         private readonly IValidator<UpdateExpenseDto> _updateValidator;
 
         public ExpenseService(
             IExpenseRepository repository,
             ICategoryRepository categoryRepository,
+            IExpenseMonthlyRepository monthlyRepository,
             IValidator<CreateExpenseDto> createValidator,
             IValidator<UpdateExpenseDto> updateValidator)
         {
             _repository = repository;
             _categoryRepository = categoryRepository;
+            _monthlyRepository = monthlyRepository;
             _createValidator = createValidator;
             _updateValidator = updateValidator;
         }
@@ -150,6 +153,38 @@ namespace MisFinanzas.Application.Expenses.Services
             await _repository.SaveChangesAsync();
 
             // Nota (Fase 2): aquí también se desactivarán los pendientes futuros del gasto (RF-11).
+        }
+
+        public async Task TerminateAsync(int id, string userId)
+        {
+            var expense = await _repository.GetByIdAsync(id, userId);
+            if (expense is null)
+                throw new KeyNotFoundException("El gasto no existe.");
+
+            // Deuda saldada: la vigencia termina en el mes actual (hora de Bogotá).
+            // EndMonth es inclusive, así que el mes actual aún cuenta y deja de generarse desde el próximo.
+            var endMonth = DateTime.UtcNow.AddHours(-5).ToString("yyyy-MM");
+            expense.EndMonth = endMonth;
+            expense.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.SaveChangesAsync();
+
+            // Limpia ocurrencias futuras aún no reales (pendientes/omitidas) ya generadas,
+            // para que no queden colgando en meses posteriores. Las pagadas se conservan.
+            await _monthlyRepository.DeactivateFutureNonRealAsync(id, endMonth);
+        }
+
+        public async Task ReactivateAsync(int id, string userId)
+        {
+            var expense = await _repository.GetByIdAsync(id, userId);
+            if (expense is null)
+                throw new KeyNotFoundException("El gasto no existe.");
+
+            // Vuelve a estar vigente sin fin: se genera cada mes como antes.
+            expense.EndMonth = null;
+            expense.UpdatedAt = DateTime.UtcNow;
+
+            await _repository.SaveChangesAsync();
         }
     }
 }

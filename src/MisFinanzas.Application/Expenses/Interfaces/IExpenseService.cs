@@ -17,5 +17,12 @@ namespace MisFinanzas.Application.Expenses.Interfaces
         /// <summary>Desactiva (soft-delete) un gasto.</summary>
         Task DeactivateAsync(int id, string userId);
 
+        /// <summary>Termina un gasto (deuda saldada): fija EndMonth en el mes actual;
+        /// deja de generarse desde el próximo mes, pero conserva el historial.</summary>
+        Task TerminateAsync(int id, string userId);
+
+        /// <summary>Reactiva un gasto terminado: limpia EndMonth y vuelve a generarse.</summary>
+        Task ReactivateAsync(int id, string userId);
+
     }
 }

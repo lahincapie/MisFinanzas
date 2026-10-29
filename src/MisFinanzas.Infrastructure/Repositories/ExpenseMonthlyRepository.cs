@@ -83,5 +83,25 @@ namespace MisFinanzas.Infrastructure.Repositories
             return lastPayments.Average();
         }
 
+        public async Task<int> DeactivateFutureNonRealAsync(int expenseId, string untilMonth)
+        {
+            // Ocurrencias activas de meses posteriores a 'untilMonth' que NO son reales
+            // (todo lo que no esté Pagado: Pendiente u Omitido). Las pagadas se conservan.
+            var rows = await _context.ExpenseMonthlies
+                .Where(m => m.IsActive
+                    && m.ExpenseId == expenseId
+                    && string.Compare(m.Month, untilMonth) > 0
+                    && m.Status != ExpenseStatus.Paid)
+                .ToListAsync();
+
+            foreach (var row in rows)
+                row.IsActive = false;
+
+            if (rows.Count > 0)
+                await _context.SaveChangesAsync();
+
+            return rows.Count;
+        }
+
     }
 }

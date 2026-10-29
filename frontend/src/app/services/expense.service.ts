@@ -47,4 +47,12 @@ export class ExpenseService {
   createOneOff(data: OneOffExpenseRequest): Observable<unknown> {
     return this.http.post(`${this.baseUrl}/one-off`, data);
   }
+
+  terminate(id: number): Observable<unknown> {
+    return this.http.post(`${this.baseUrl}/${id}/terminate`, null);
+  }
+
+  reactivate(id: number): Observable<unknown> {
+    return this.http.post(`${this.baseUrl}/${id}/reactivate`, null);
+  }
 }

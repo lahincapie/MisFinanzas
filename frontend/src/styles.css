@@ -140,6 +140,11 @@ body {
     color: var(--color-primary);
 }
 
+.type-chip.terminado {
+    background-color: var(--color-border-soft);
+    color: var(--color-muted);
+}
+
 .cat-chip {
     display: inline-flex;
     align-items: center;
