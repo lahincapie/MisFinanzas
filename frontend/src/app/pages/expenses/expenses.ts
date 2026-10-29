@@ -102,4 +102,49 @@ export class Expenses implements OnInit {
       });
     });
   }
+
+  private getCurrentMonth(): string {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  isTerminated(exp: Expense): boolean {
+    return !!exp.endMonth;
+  }
+
+  terminateExpense(exp: Expense): void {
+    const ref = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Terminar gasto',
+        message: `¿Terminar <strong>${exp.name}</strong> (deuda saldada)? Se marcará con fin en ${this.getCurrentMonth()}: dejará de generarse desde el próximo mes, pero conservas todo el historial. Podrás reactivarlo si lo vuelves a necesitar.`,
+        confirmLabel: 'Terminar',
+        icon: 'task_alt'
+      }
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.expenseService.terminate(exp.id).subscribe({
+        next: () => this.loadExpenses(),
+        error: (err) => console.error('Error al terminar gasto:', err)
+      });
+    });
+  }
+
+  reactivateExpense(exp: Expense): void {
+    const ref = this.dialog.open(ConfirmDialog, {
+      data: {
+        title: 'Reactivar gasto',
+        message: `¿Reactivar <strong>${exp.name}</strong>? Volverá a generarse cada mes como antes.`,
+        confirmLabel: 'Reactivar',
+        icon: 'replay'
+      }
+    });
+    ref.afterClosed().subscribe(ok => {
+      if (!ok) return;
+      this.expenseService.reactivate(exp.id).subscribe({
+        next: () => this.loadExpenses(),
+        error: (err) => console.error('Error al reactivar gasto:', err)
+      });
+    });
+  }
 }

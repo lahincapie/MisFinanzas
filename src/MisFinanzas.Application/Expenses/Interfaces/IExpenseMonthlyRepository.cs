@@ -34,5 +34,11 @@ namespace MisFinanzas.Application.Expenses.Interfaces
         /// <summary>Promedio de los últimos N pagos activos de un gasto (0 si no hay histórico).</summary>
         Task<decimal> GetAveragePaymentAsync(int expenseId, int lastN = 3);
 
+        /// <summary>
+        /// Desactiva las ocurrencias futuras aún no reales (Pendiente/Omitido) de un gasto,
+        /// para meses posteriores a 'untilMonth'. No toca las pagadas. Devuelve cuántas desactivó.
+        /// </summary>
+        Task<int> DeactivateFutureNonRealAsync(int expenseId, string untilMonth);
+
     }
 }

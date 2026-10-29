@@ -61,6 +61,22 @@ namespace MisFinanzas.API.Controllers
             return NoContent();
         }
 
+        /// <summary>Termina un gasto (deuda saldada): deja de generarse desde el próximo mes.</summary>
+        [HttpPost("{id}/terminate")]
+        public async Task<IActionResult> Terminate(int id)
+        {
+            await _service.TerminateAsync(id, CurrentUserId);
+            return NoContent();
+        }
+
+        /// <summary>Reactiva un gasto terminado: vuelve a generarse cada mes.</summary>
+        [HttpPost("{id}/reactivate")]
+        public async Task<IActionResult> Reactivate(int id)
+        {
+            await _service.ReactivateAsync(id, CurrentUserId);
+            return NoContent();
+        }
+
         /// <summary>
         /// Genera los registros mensuales pendientes del mes indicado ("YYYY-MM")
         /// para los gastos que aplican y aún no lo tienen.
