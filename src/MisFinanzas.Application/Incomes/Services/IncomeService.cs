@@ -12,15 +12,18 @@ namespace MisFinanzas.Application.Incomes.Services
     public class IncomeService : IIncomeService
     {
         private readonly IIncomeRepository _repository;
+        private readonly IIncomeMonthlyRepository _monthlyRepository;
         private readonly IValidator<CreateIncomeDto> _createValidator;
         private readonly IValidator<UpdateIncomeDto> _updateValidator;
 
         public IncomeService(
             IIncomeRepository repository,
+            IIncomeMonthlyRepository monthlyRepository,
             IValidator<CreateIncomeDto> createValidator,
             IValidator<UpdateIncomeDto> updateValidator)
         {
             _repository = repository;
+            _monthlyRepository = monthlyRepository;
             _createValidator = createValidator;
             _updateValidator = updateValidator;
         }
@@ -114,7 +117,9 @@ namespace MisFinanzas.Application.Incomes.Services
             income.UpdatedAt = DateTime.UtcNow;
             await _repository.SaveChangesAsync();
 
-            // Nota (Fase 2): aquí también se desactivarán los pendientes futuros del ingreso (RF-18).
+            // Cascada (RN-19): desactivar sus ocurrencias aún no reales (pendientes),
+            // de cualquier mes. Las recibidas se conservan como historial.
+            await _monthlyRepository.DeactivateAllNonRealAsync(id);
         }
     }
 }

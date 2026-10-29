@@ -103,5 +103,24 @@ namespace MisFinanzas.Infrastructure.Repositories
             return rows.Count;
         }
 
+        public async Task<int> DeactivateAllNonRealAsync(int expenseId)
+        {
+            // Todas las ocurrencias activas del gasto que NO son reales (no Pagadas),
+            // de cualquier mes. Las pagadas se conservan como historial.
+            var rows = await _context.ExpenseMonthlies
+                .Where(m => m.IsActive
+                    && m.ExpenseId == expenseId
+                    && m.Status != ExpenseStatus.Paid)
+                .ToListAsync();
+
+            foreach (var row in rows)
+                row.IsActive = false;
+
+            if (rows.Count > 0)
+                await _context.SaveChangesAsync();
+
+            return rows.Count;
+        }
+
     }
 }

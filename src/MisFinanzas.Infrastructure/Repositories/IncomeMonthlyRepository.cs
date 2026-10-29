@@ -65,5 +65,24 @@ namespace MisFinanzas.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<int> DeactivateAllNonRealAsync(int incomeId)
+        {
+            // Todas las ocurrencias activas del ingreso que NO son reales (no Recibidas),
+            // de cualquier mes. Las recibidas se conservan como historial.
+            var rows = await _context.IncomeMonthlies
+                .Where(m => m.IsActive
+                    && m.IncomeId == incomeId
+                    && m.Status != IncomeStatus.Received)
+                .ToListAsync();
+
+            foreach (var row in rows)
+                row.IsActive = false;
+
+            if (rows.Count > 0)
+                await _context.SaveChangesAsync();
+
+            return rows.Count;
+        }
+
     }
 }

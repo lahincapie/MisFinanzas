@@ -152,7 +152,9 @@ namespace MisFinanzas.Application.Expenses.Services
             // 3. Guardar (EF rastrea el cambio)
             await _repository.SaveChangesAsync();
 
-            // Nota (Fase 2): aquí también se desactivarán los pendientes futuros del gasto (RF-11).
+            // 4. Cascada (RN-19): desactivar sus ocurrencias aún no reales (pendientes/omitidas),
+            //    de cualquier mes. Las pagadas se conservan como historial.
+            await _monthlyRepository.DeactivateAllNonRealAsync(id);
         }
 
         public async Task TerminateAsync(int id, string userId)
