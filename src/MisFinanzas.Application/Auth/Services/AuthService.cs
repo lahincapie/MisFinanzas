@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MisFinanzas.Application.Auth.Dtos;
 using MisFinanzas.Application.Auth.Interfaces;
+using MisFinanzas.Application.Categories;
+using MisFinanzas.Application.Categories.Interfaces;
 using MisFinanzas.Domain.Users;
 
 namespace MisFinanzas.Application.Auth.Services
@@ -13,13 +15,16 @@ namespace MisFinanzas.Application.Auth.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJwtTokenGenerator _tokenGenerator;
+        private readonly ICategoryRepository _categoryRepository;
 
 
         public AuthService(UserManager<ApplicationUser> userManager,
-            IJwtTokenGenerator tokenGenerator)
+            IJwtTokenGenerator tokenGenerator,
+            ICategoryRepository categoryRepository)
         {
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<AuthResultDto> RegisterAsync(RegisterDto dto)
@@ -47,7 +52,12 @@ namespace MisFinanzas.Application.Auth.Services
                 throw new InvalidOperationException($"No se pudo registrar: {errores}");
             }
 
-            // 5. Devolver los datos (el Token se llenará cuando implementemos login)
+            // 5. Sembrar las categorías por defecto del usuario nuevo (RF-USR-01)
+            foreach (var category in DefaultCategories.BuildFor(user.Id))
+                await _categoryRepository.AddAsync(category);
+            await _categoryRepository.SaveChangesAsync();
+
+            // 6. Devolver los datos (el Token se llenará cuando implementemos login)
             return new AuthResultDto
             {
                 UserId = user.Id,
